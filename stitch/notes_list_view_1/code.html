@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NoteStream - Premium Notes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6467f2",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101122",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .note-card:hover .quick-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .quick-actions {
+            opacity: 0;
+            transform: translateY(4px);
+            transition: all 0.2s ease-in-out;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(100, 103, 242, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased selection:bg-primary/30">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 flex flex-col bg-background-light dark:bg-background-dark">
+<div class="p-6 flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">rocket_launch</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">NoteStream</h2>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar px-4 space-y-8">
+<div>
+<div class="px-2 mb-2">
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Library</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary font-semibold" href="#">
+<span class="material-symbols-outlined text-[22px]">description</span>
+<span class="text-sm">All Notes</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">star</span>
+<span class="text-sm">Favorites</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">share</span>
+<span class="text-sm">Shared</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">archive</span>
+<span class="text-sm">Archived</span>
+</a>
+</nav>
+</div>
+<div>
+<div class="px-2 mb-2 flex items-center justify-between">
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Workspaces</p>
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<div class="size-2 rounded-full bg-blue-500"></div>
+<span class="text-sm">Project X</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<div class="size-2 rounded-full bg-emerald-500"></div>
+<span class="text-sm">Design Strategy</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<div class="size-2 rounded-full bg-amber-500"></div>
+<span class="text-sm">Marketing CRM</span>
+</a>
+</nav>
+</div>
+</div>
+<div class="p-4 mt-auto">
+<div class="p-4 bg-slate-100 dark:bg-slate-800/50 rounded-xl">
+<p class="text-xs font-medium mb-1">Storage Usage</p>
+<div class="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+<p class="text-[10px] text-slate-400 mt-2">6.2 GB of 10 GB used</p>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Header -->
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 bg-background-light dark:bg-background-dark/50 backdrop-blur-md z-10">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50 placeholder:text-slate-400" placeholder="Search notes, tags, or attachments..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-8">
+<button class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+                        New Note
+                    </button>
+<div class="h-6 w-px bg-slate-200 dark:border-slate-800"></div>
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="size-8 rounded-full bg-primary/20 overflow-hidden border border-slate-200 dark:border-slate-800">
+<img alt="User" class="w-full h-full object-cover" data-alt="Professional user profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTsSYEYPEQkTsjlwVHQY1QMBsQAfgRye9uxBD0e9W9CVxQeHPcsorqD-mwginsCgnmoK1Qi7g2Px9SCaN50H8t1C0ZeF5jVVc0Rzvbj96-X0dOHrD32OJjaFbV3QkAXoI4m9ibquPQbusWdT4z3qJStZnqc_T-kQaxjIQS-OWnVmkkp1GFuAMEHH20nCBAj8XCSwNsdNJE5m7L0cwT-iFbnGpbyvdFbgRz4M8mFPDIcMc-qTjjO3N2nUVYMLjZCiQ4fCpdyLuYQYM"/>
+</div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto bg-slate-50 dark:bg-[#0b0c1a]">
+<!-- View Controls -->
+<div class="px-8 py-6 flex items-center justify-between">
+<div>
+<h1 class="text-2xl font-bold">My Notes</h1>
+<p class="text-sm text-slate-400">84 notes in total</p>
+</div>
+<div class="flex items-center gap-2 bg-white dark:bg-slate-800 p-1 rounded-xl shadow-sm">
+<button class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-primary">
+<span class="material-symbols-outlined text-sm">grid_view</span>
+</button>
+<button class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-sm">list</span>
+</button>
+</div>
+</div>
+<!-- Grid Layout -->
+<div class="px-8 pb-12">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Note Card 1 -->
+<div class="note-card relative group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all cursor-pointer overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-blue-500/10 text-blue-500 rounded-lg">
+<span class="material-symbols-outlined text-xl">lightbulb</span>
+</div>
+<div class="quick-actions flex items-center gap-1">
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-amber-500 transition-colors">
+<span class="material-symbols-outlined text-sm">star</span>
+</button>
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">ios_share</span>
+</button>
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+</div>
+<h3 class="font-bold text-lg mb-2 leading-tight">Product Launch Strategy Q4</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-4 leading-relaxed">
+                                Our primary focus for this quarter is scaling the user acquisition pipeline. We need to evaluate the current ROAS for Instagram and TikTok campaigns...
+                            </p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase tracking-wider">Strategy</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase tracking-wider">Work</span>
+</div>
+<div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<span class="text-[11px] text-slate-400 font-medium">Updated 2h ago</span>
+<div class="flex -space-x-2">
+<img alt="Avatar" class="size-5 rounded-full border-2 border-white dark:border-slate-900" data-alt="Team member profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQOPpjDbtwL_pC_iQ3ujS6MZPex_dJ1gO9FNlHnoXE-QbWda9p-b3UUlAmOzAuXu-_NjOqWXn6DmDtoNitVa8uXpGi4V2ICSkC1pfF0slGg0CWYN0wYxXAu5c5gvCo8usIxBXptwt7jInPiUfHOucSnFteTo_lgrsS8gNc_7hcvAhWFsKPDgupY0MM0S4JoSyNJ7h4uq9oxy4VKigHsy44PJSbrZbrTmYDnxo7l1oECm9QIUv4pq5eb5LSteItBH3l_Q2IGjJf9tk"/>
+<img alt="Avatar" class="size-5 rounded-full border-2 border-white dark:border-slate-900" data-alt="Team member profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC_0NKz0sTgx6UvhRhlTh3q1p5SXnYn1kp0MdmnmFdSLtWtycEe66UGsMlhNQrzvHE3BCbzd0NBgs6kQe2Bew846NJWVIE9DbjU-Jzrz29WnlxqgOtGTka64Dvs6WpMAkcZ1CmrG3TKryMnndZQtiaW-h-zkzP74CiCdWqmHgo4yDb9I_i3lOFgBfckQ-sjw6dy6xoIl4FQ1t-CYGodRaPJMbf2mDX6IrPOTX6no6RsK6UFcHuD1XT8D1SgEMTabZAgCdxIE6bHnA"/>
+</div>
+</div>
+</div>
+<!-- Note Card 2 (With Image Preview) -->
+<div class="note-card relative group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all cursor-pointer overflow-hidden flex flex-col">
+<div class="h-32 w-full bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
+<img alt="Electronics" class="w-full h-full object-cover opacity-80" data-alt="Retro computer components on a desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO7LB9igm_kMr4x3hOPClE9z0t4w01h72YVrTvynlsr9Nf3zyjOK2QvcQEXWIJklA6HZtuDL6LeN0csj6cth2p8oZ39g19uXAQOVn0HpuoftaBKwN7HsGLL73RSJx16m2RmIGVRNS03Tu7TGEVLaRSs-wNmvWBN_3RpnX5cZjVng0F2HFPy1K-Xsuv4xQM-7u6t0FBJnzjTp7d2WLeNiLlVhGLPe9P8bnBCOwNbZeXjhOSkkYfPHsBmBlxfL-NpBB5ghKIY_kP4As"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
+<div class="absolute top-3 right-3 quick-actions">
+<div class="bg-white/10 backdrop-blur-md p-1 rounded-xl flex gap-1 border border-white/20">
+<button class="p-1 hover:bg-white/20 rounded-lg text-white transition-colors">
+<span class="material-symbols-outlined text-sm">star</span>
+</button>
+<button class="p-1 hover:bg-white/20 rounded-lg text-white transition-colors">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<h3 class="font-bold text-lg mb-2 leading-tight">Home Office Setup Ideas</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-4">
+                                    Curated list of minimalist desks, ergonomic chairs, and cable management solutions...
+                                </p>
+<div class="flex flex-wrap gap-2 mt-auto">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase tracking-wider">Lifestyle</span>
+</div>
+<div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
+<span class="text-[11px] text-slate-400 font-medium">Updated Yesterday</span>
+</div>
+</div>
+</div>
+<!-- Note Card 3 -->
+<div class="note-card relative group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all cursor-pointer overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-emerald-500/10 text-emerald-500 rounded-lg">
+<span class="material-symbols-outlined text-xl">shopping_cart</span>
+</div>
+<div class="quick-actions flex items-center gap-1">
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-amber-500 transition-colors">
+<span class="material-symbols-outlined text-sm">star</span>
+</button>
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+</div>
+<h3 class="font-bold text-lg mb-2 leading-tight">Weekly Grocery List</h3>
+<ul class="text-sm text-slate-500 dark:text-slate-400 space-y-1 mb-4">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs">check_box</span> Almond Milk</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs">check_box_outline_blank</span> Fresh Basil</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs">check_box_outline_blank</span> Organic Coffee Beans</li>
+</ul>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase tracking-wider">Personal</span>
+</div>
+<div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+<span class="text-[11px] text-slate-400 font-medium">Updated 3 days ago</span>
+</div>
+</div>
+<!-- Note Card 4 -->
+<div class="note-card relative group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all cursor-pointer overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 text-primary rounded-lg">
+<span class="material-symbols-outlined text-xl">terminal</span>
+</div>
+<div class="quick-actions flex items-center gap-1">
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-amber-500 transition-colors">
+<span class="material-symbols-outlined text-sm">star</span>
+</button>
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+</div>
+<h3 class="font-bold text-lg mb-2 leading-tight">Kubernetes Setup Snippets</h3>
+<div class="bg-slate-50 dark:bg-slate-800 rounded-lg p-2 mb-4 font-mono text-[10px] text-slate-500">
+                                kubectl apply -f deployment.yaml<br/>
+                                kubectl get services
+                            </div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase tracking-wider">Dev</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase tracking-wider">Cloud</span>
+</div>
+<div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+<span class="text-[11px] text-slate-400 font-medium">Updated 1 week ago</span>
+</div>
+</div>
+<!-- Note Card 5 -->
+<div class="note-card relative group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all cursor-pointer overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-amber-500/10 text-amber-500 rounded-lg">
+<span class="material-symbols-outlined text-xl">menu_book</span>
+</div>
+<div class="quick-actions flex items-center gap-1">
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-amber-500 transition-colors">
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+</button>
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+</div>
+<h3 class="font-bold text-lg mb-2 leading-tight">Atomic Habits - Summary</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-4 leading-relaxed">
+                                Summary of James Clear's masterpiece. The 4 laws of behavior change: Make it obvious, attractive, easy, and satisfying...
+                            </p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase tracking-wider">Books</span>
+</div>
+<div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<span class="text-[11px] text-slate-400 font-medium">Updated Oct 24</span>
+</div>
+</div>
+<!-- Note Card 6 -->
+<div class="note-card relative group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all cursor-pointer overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-purple-500/10 text-purple-500 rounded-lg">
+<span class="material-symbols-outlined text-xl">brush</span>
+</div>
+<div class="quick-actions flex items-center gap-1">
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-amber-500 transition-colors">
+<span class="material-symbols-outlined text-sm">star</span>
+</button>
+<button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+</div>
+<h3 class="font-bold text-lg mb-2 leading-tight">Brand Assets 2024</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-4 leading-relaxed">
+                                Link to Figma file and shared drive for all new brand assets including logos, typography, and color palette...
+                            </p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase tracking-wider">Design</span>
+</div>
+<div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<span class="text-[11px] text-slate-400 font-medium">Updated Sep 12</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Action Bar (Mobile/Condensed Overlay) -->
+<div class="fixed bottom-8 right-8 lg:hidden">
+<button class="size-14 rounded-full bg-primary text-white shadow-2xl flex items-center justify-center hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-2xl">add</span>
+</button>
+</div>
+</main>
+</div>
+</body></html>

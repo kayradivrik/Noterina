@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6467f2",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101122",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #6467f2;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="flex h-screen w-full overflow-hidden">
+<!-- SideNavBar Component -->
+<aside class="w-64 border-r border-slate-200 dark:border-primary/10 bg-white dark:bg-background-dark/50 flex flex-col h-full">
+<div class="p-6">
+<h1 class="text-xl font-bold text-primary tracking-tight">NoteFlow</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-widest font-semibold">Settings</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<div class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">General</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary border border-primary/20 cursor-pointer">
+<span class="material-symbols-outlined">palette</span>
+<span class="text-sm font-medium">Appearance</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="text-sm font-medium">Editor</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">database</span>
+<span class="text-sm font-medium">Storage</span>
+</div>
+<div class="pt-4 mt-4 border-t border-slate-200 dark:border-primary/10">
+<div class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-sm font-medium">Account</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">cloud_sync</span>
+<span class="text-sm font-medium">Sync</span>
+</div>
+</div>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-primary/10">
+<div class="flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-full bg-primary/30 flex items-center justify-center text-primary font-bold text-xs">JD</div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-semibold truncate">Jane Doe</p>
+<p class="text-[10px] text-slate-500 truncate italic">Pro Plan</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-sm">logout</span>
+</div>
+</div>
+</aside>
+<!-- Right Content Pane -->
+<main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark p-8 lg:p-12">
+<div class="max-w-3xl mx-auto">
+<header class="mb-10">
+<h2 class="text-3xl font-bold tracking-tight mb-2">Appearance</h2>
+<p class="text-slate-500 dark:text-slate-400">Customize how NoteFlow looks and feels on your device.</p>
+</header>
+<section class="space-y-10">
+<!-- Theme Toggle -->
+<div class="group">
+<h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">dark_mode</span>
+                        Interface Theme
+                    </h3>
+<div class="grid grid-cols-2 gap-4">
+<label class="relative flex flex-col gap-3 cursor-pointer">
+<input class="peer sr-only" name="theme" type="radio" value="light"/>
+<div class="h-24 w-full rounded-xl border-2 border-slate-200 dark:border-primary/10 bg-white p-2 peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+<div class="flex flex-col gap-2">
+<div class="h-2 w-1/2 bg-slate-200 rounded"></div>
+<div class="h-2 w-full bg-slate-100 rounded"></div>
+<div class="h-2 w-3/4 bg-slate-100 rounded"></div>
+</div>
+</div>
+<span class="text-sm font-medium text-center text-slate-600 dark:text-slate-400 peer-checked:text-primary">Light Mode</span>
+</label>
+<label class="relative flex flex-col gap-3 cursor-pointer">
+<input checked="" class="peer sr-only" name="theme" type="radio" value="dark"/>
+<div class="h-24 w-full rounded-xl border-2 border-slate-200 dark:border-primary/10 bg-slate-900 p-2 peer-checked:border-primary peer-checked:bg-primary/20 transition-all">
+<div class="flex flex-col gap-2">
+<div class="h-2 w-1/2 bg-slate-700 rounded"></div>
+<div class="h-2 w-full bg-slate-800 rounded"></div>
+<div class="h-2 w-3/4 bg-slate-800 rounded"></div>
+</div>
+</div>
+<span class="text-sm font-medium text-center text-slate-600 dark:text-slate-400 peer-checked:text-primary">Dark Mode</span>
+</label>
+</div>
+</div>
+<!-- Font Family -->
+<div>
+<h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">font_download</span>
+                        Typography
+                    </h3>
+<div class="bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/10 rounded-xl p-6 space-y-6">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-slate-500">Font Family</label>
+<select class="w-full bg-slate-50 dark:bg-background-dark border border-slate-200 dark:border-primary/20 rounded-lg px-4 py-2 text-sm focus:ring-primary focus:border-primary outline-none">
+<option>Inter (System Default)</option>
+<option>Roboto Mono</option>
+<option>Merriweather</option>
+<option>Source Code Pro</option>
+</select>
+</div>
+<!-- Font Size Slider -->
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<label class="text-sm font-medium text-slate-500">Font Size</label>
+<span class="text-xs font-bold text-primary px-2 py-1 bg-primary/10 rounded">14px</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs text-slate-400">A</span>
+<input class="flex-1 h-1.5 bg-slate-200 dark:bg-primary/20 rounded-lg appearance-none cursor-pointer accent-primary" max="24" min="12" type="range" value="14"/>
+<span class="text-lg text-slate-400">A</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Features/Toggles -->
+<div>
+<h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">auto_mode</span>
+                        Editor Behavior
+                    </h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/10 rounded-xl">
+<div class="flex flex-col">
+<span class="text-sm font-medium">Autosave Changes</span>
+<span class="text-xs text-slate-500">Automatically save your notes as you type</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-4 bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/10 rounded-xl">
+<div class="flex flex-col">
+<span class="text-sm font-medium">Line Numbers</span>
+<span class="text-xs text-slate-500">Show line count in the editor gutter</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Save/Reset Actions -->
+<div class="pt-6 flex justify-end gap-3 border-t border-slate-200 dark:border-primary/10">
+<button class="px-6 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors">
+                        Reset to Default
+                    </button>
+<button class="px-8 py-2 rounded-lg text-sm font-medium bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all">
+                        Apply Changes
+                    </button>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

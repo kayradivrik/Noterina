@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NoteStream Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6467f2",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101122",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-primary/20 bg-background-light dark:bg-background-dark px-4 py-4">
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center rounded-lg p-1 text-slate-600 dark:text-slate-400 hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-xl font-bold tracking-tight">Settings</h1>
+</div>
+<button class="text-sm font-semibold text-primary">Done</button>
+</header>
+<main class="flex-1 overflow-y-auto pb-24">
+<section class="mt-6">
+<h3 class="px-5 mb-2 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Appearance</h3>
+<div class="bg-white dark:bg-slate-900/50 border-y border-slate-200 dark:border-primary/10">
+<div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-primary/5">
+<div class="flex items-center gap-4">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">palette</span>
+</div>
+<span class="font-medium">Theme</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-slate-500 dark:text-slate-400">Dark</span>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+<div class="flex items-center justify-between px-5 py-4">
+<div class="flex items-center gap-4">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">text_fields</span>
+</div>
+<span class="font-medium">Typography</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-slate-500 dark:text-slate-400">Inter</span>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<section class="mt-8">
+<h3 class="px-5 mb-2 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Editor Behavior</h3>
+<div class="bg-white dark:bg-slate-900/50 border-y border-slate-200 dark:border-primary/10">
+<div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-primary/5">
+<div class="flex items-center gap-4">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">auto_fix_high</span>
+</div>
+<span class="font-medium">Auto-save</span>
+</div>
+<div class="relative inline-flex h-6 w-11 items-center rounded-full bg-primary">
+<span class="inline-block h-4 w-4 translate-x-6 transform rounded-full bg-white transition"></span>
+</div>
+</div>
+<div class="flex items-center justify-between px-5 py-4">
+<div class="flex items-center gap-4">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">markdown</span>
+</div>
+<span class="font-medium">Markdown Live Preview</span>
+</div>
+<div class="relative inline-flex h-6 w-11 items-center rounded-full bg-slate-300 dark:bg-slate-700">
+<span class="inline-block h-4 w-4 translate-x-1 transform rounded-full bg-white transition"></span>
+</div>
+</div>
+</div>
+</section>
+<section class="mt-8">
+<h3 class="px-5 mb-2 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Storage &amp; Backup</h3>
+<div class="bg-white dark:bg-slate-900/50 border-y border-slate-200 dark:border-primary/10">
+<div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-primary/5">
+<div class="flex items-center gap-4">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">cloud_sync</span>
+</div>
+<span class="font-medium">Cloud Sync</span>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+<div class="flex items-center justify-between px-5 py-4">
+<div class="flex items-center gap-4">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">hard_drive</span>
+</div>
+<div>
+<span class="block font-medium">Local Storage</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">124 MB used of 1 GB</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+</section>
+<section class="mt-8">
+<h3 class="px-5 mb-2 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Account</h3>
+<div class="bg-white dark:bg-slate-900/50 border-y border-slate-200 dark:border-primary/10">
+<div class="flex items-center justify-between px-5 py-4">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+<img alt="Alex's profile picture" class="h-full w-full object-cover" data-alt="User profile avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhf_MFffXAXKDWMQJh0mUm9DWMNcjMQwl9GTL9Etti_DyKdCte2gg5IbFu7nCz3wfByVUb9uZFUBiJhGZ9wzJ4JEt0ac4TzqRfBRmzrB4xJ2v_0g_KYjOCe5-yDC9qsswq2iQC9Vi2HSMj_uCa0ry9_wjjb52hQhoV8aRcSjOCCtwPBxlHFA3G_BWTd2IshxY_JUctMm-5dUV3MjcjcQ3SKzt_1MHg3067J17nfCq0pou6N1KFpEXxzyMVrUK8bLUd2TjjnBzANCE"/>
+</div>
+<div>
+<span class="block font-medium">Alex Morgan</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Pro Plan • Renews Dec 12</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+</section>
+<div class="px-5 mt-10 mb-10">
+<button class="w-full rounded-xl bg-red-500/10 py-4 text-center font-semibold text-red-500 hover:bg-red-500/20 transition-colors">
+                    Log Out
+                </button>
+<p class="mt-4 text-center text-xs text-slate-500">NoteStream v2.4.0</p>
+</div>
+</main>
+<nav class="absolute bottom-0 left-0 flex w-full border-t border-slate-200 dark:border-primary/20 bg-background-light dark:bg-background-dark/95 backdrop-blur-md px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">description</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Notes</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">search</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Search</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">cloud_upload</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Sync</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">settings</span>
+<p class="text-[10px] font-medium uppercase tracking-wider">Settings</p>
+</a>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,225 @@
+import { app } from 'electron'
+import * as fs from 'fs'
+import * as path from 'path'
+import type { Note, NotesData, AppSettings } from '../shared/types'
+
+const defaultSettings: AppSettings = {
+  theme: 'dark',
+  fontSize: 'medium',
+  autosave: true,
+  autosaveDelayMs: 2000,
+  defaultView: 'all',
+  sortOrder: 'newest',
+  compactList: false,
+}
+
+function getDataPath(): string {
+  const userData = app.getPath('userData')
+  return path.join(userData, 'notes-data')
+}
+
+function getNotesFilePath(): string {
+  return path.join(getDataPath(), 'notes.json')
+}
+
+function getSettingsFilePath(): string {
+  return path.join(getDataPath(), 'settings.json')
+}
+
+function ensureDataDir(): void {
+  const dir = getDataPath()
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true })
+  }
+}
+
+function loadNotesRaw(): NotesData {
+  ensureDataDir()
+  const filePath = getNotesFilePath()
+  if (!fs.existsSync(filePath)) {
+    return { notes: [], version: 1 }
+  }
+  try {
+    const raw = fs.readFileSync(filePath, 'utf-8')
+    const data = JSON.parse(raw) as NotesData
+    return Array.isArray(data.notes) ? data : { notes: [], version: 1 }
+  } catch {
+    return { notes: [], version: 1 }
+  }
+}
+
+function saveNotesRaw(data: NotesData): void {
+  ensureDataDir()
+  fs.writeFileSync(getNotesFilePath(), JSON.stringify(data, null, 2), 'utf-8')
+}
+
+function loadSettings(): AppSettings {
+  ensureDataDir()
+  const filePath = getSettingsFilePath()
+  if (!fs.existsSync(filePath)) {
+    return { ...defaultSettings }
+  }
+  try {
+    const raw = fs.readFileSync(filePath, 'utf-8')
+    return { ...defaultSettings, ...JSON.parse(raw) } as AppSettings
+  } catch {
+    return { ...defaultSettings }
+  }
+}
+
+function saveSettings(settings: AppSettings): void {
+  ensureDataDir()
+  fs.writeFileSync(getSettingsFilePath(), JSON.stringify(settings, null, 2), 'utf-8')
+}
+
+function generateId(): string {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+}
+
+export const storage = {
+  getNotes(includeDeleted: boolean): Note[] {
+    const { notes } = loadNotesRaw()
+    if (includeDeleted) return notes
+    return notes.filter((n) => !n.isDeleted)
+  },
+
+  getNoteById(id: string): Note | null {
+    const { notes } = loadNotesRaw()
+    return notes.find((n) => n.id === id) ?? null
+  },
+
+  createNote(note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>): Note {
+    const data = loadNotesRaw()
+    const now = new Date().toISOString()
+    const newNote: Note = {
+      id: generateId(),
+      title: note.title ?? 'Untitled',
+      content: note.content ?? '',
+      createdAt: now,
+      updatedAt: now,
+      tags: note.tags ?? [],
+      isFavorite: note.isFavorite ?? false,
+      isArchived: note.isArchived ?? false,
+      isDeleted: note.isDeleted ?? false,
+      icon: note.icon ?? undefined,
+    }
+    data.notes.push(newNote)
+    saveNotesRaw(data)
+    return newNote
+  },
+
+  updateNote(id: string, updates: Partial<Note>): Note | null {
+    const data = loadNotesRaw()
+    const index = data.notes.findIndex((n) => n.id === id)
+    if (index === -1) return null
+    const note = data.notes[index]
+    const updatedAt = new Date().toISOString()
+    const allowed = ['title', 'content', 'tags', 'isFavorite', 'isArchived', 'isDeleted', 'icon'] as const
+    for (const key of allowed) {
+      if (updates[key] !== undefined) {
+        ;(note as unknown as Record<string, unknown>)[key] = updates[key]
+      }
+    }
+    note.updatedAt = updatedAt
+    saveNotesRaw(data)
+    return note
+  },
+
+  deleteNote(id: string, permanent: boolean): boolean {
+    const data = loadNotesRaw()
+    const index = data.notes.findIndex((n) => n.id === id)
+    if (index === -1) return false
+    if (permanent) {
+      data.notes.splice(index, 1)
+    } else {
+      data.notes[index].isDeleted = true
+      data.notes[index].updatedAt = new Date().toISOString()
+    }
+    saveNotesRaw(data)
+    return true
+  },
+
+  toggleFavorite(id: string): Note | null {
+    const data = loadNotesRaw()
+    const note = data.notes.find((n) => n.id === id)
+    if (!note) return null
+    note.isFavorite = !note.isFavorite
+    note.updatedAt = new Date().toISOString()
+    saveNotesRaw(data)
+    return note
+  },
+
+  searchNotes(query: string): Note[] {
+    const { notes } = loadNotesRaw()
+    const q = query.toLowerCase().trim()
+    if (!q) return notes.filter((n) => !n.isDeleted)
+    return notes.filter(
+      (n) =>
+        !n.isDeleted &&
+        (n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q) || n.tags.some((t) => t.toLowerCase().includes(q)))
+    )
+  },
+
+  exportNotes(format: 'json' | 'markdown'): string {
+    const notes = this.getNotes(false)
+    if (format === 'json') {
+      return JSON.stringify({ notes, exportedAt: new Date().toISOString() }, null, 2)
+    }
+    return notes
+      .map(
+        (n) =>
+          `# ${n.title}\n\n${n.content}\n\n---\n`
+      )
+      .join('\n')
+  },
+
+  importNotes(data: string, _format: 'json'): { imported: number; errors: string[] } {
+    const errors: string[] = []
+    let imported = 0
+    try {
+      const parsed = JSON.parse(data) as { notes?: Note[] }
+      const toImport = Array.isArray(parsed.notes) ? parsed.notes : []
+      const noteData = loadNotesRaw()
+      for (const n of toImport) {
+        try {
+          const newNote: Note = {
+            id: generateId(),
+            title: n.title ?? 'Imported',
+            content: n.content ?? '',
+            createdAt: n.createdAt ?? new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            tags: Array.isArray(n.tags) ? n.tags : [],
+            isFavorite: Boolean(n.isFavorite),
+            isArchived: Boolean(n.isArchived),
+            isDeleted: false,
+          }
+          noteData.notes.push(newNote)
+          imported++
+        } catch (e) {
+          errors.push(String(e))
+        }
+      }
+      if (imported > 0) saveNotesRaw(noteData)
+    } catch (e) {
+      errors.push(String(e))
+    }
+    return { imported, errors }
+  },
+
+  getSettings(): AppSettings {
+    return loadSettings()
+  },
+
+  setSettings(updates: Record<string, unknown>): AppSettings {
+    const current = loadSettings()
+    const next = { ...current, ...updates } as AppSettings
+    saveSettings(next)
+    return next
+  },
+
+  getStorageInfo(): { notesCount: number; path: string } {
+    const { notes } = loadNotesRaw()
+    const active = notes.filter((n) => !n.isDeleted).length
+    return { notesCount: active, path: getDataPath() }
+  },
+}

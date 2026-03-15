@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6467f2",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101122",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Mock Editor Background (Simulated UI) -->
+<div class="fixed inset-0 z-0 flex flex-col opacity-20 pointer-events-none select-none">
+<div class="h-16 border-b border-slate-700/50 flex items-center px-8 justify-between">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded bg-primary/20"></div>
+<div class="h-4 w-48 bg-slate-700 rounded"></div>
+</div>
+<div class="flex gap-2">
+<div class="w-20 h-8 bg-slate-700 rounded"></div>
+<div class="w-20 h-8 bg-slate-700 rounded"></div>
+</div>
+</div>
+<div class="p-12 space-y-6 max-w-4xl mx-auto w-full">
+<div class="h-12 w-3/4 bg-slate-700 rounded"></div>
+<div class="space-y-3">
+<div class="h-4 w-full bg-slate-800 rounded"></div>
+<div class="h-4 w-full bg-slate-800 rounded"></div>
+<div class="h-4 w-2/3 bg-slate-800 rounded"></div>
+</div>
+</div>
+</div>
+<!-- Overlay Backdrop -->
+<div class="fixed inset-0 z-10 bg-background-dark/80 backdrop-blur-sm flex items-center justify-center p-4">
+<!-- Modal Container -->
+<div class="w-full max-w-[560px] bg-slate-900 border border-slate-800 rounded-xl shadow-2xl overflow-hidden">
+<!-- Header Component -->
+<header class="flex items-center justify-between border-b border-slate-800 px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<span class="material-symbols-outlined text-2xl">share</span>
+</div>
+<h2 class="text-slate-100 text-lg font-semibold tracking-tight">Share "Q4 Strategic Roadmap"</h2>
+</div>
+<button class="flex items-center justify-center rounded-lg h-8 w-8 hover:bg-slate-800 text-slate-400 transition-colors">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+</header>
+<div class="p-6 space-y-6">
+<!-- Invite Section -->
+<div class="space-y-3">
+<h3 class="text-slate-100 text-sm font-semibold uppercase tracking-wider">Invite Collaborators</h3>
+<div class="flex flex-col sm:flex-row gap-2">
+<div class="flex-1 relative">
+<input class="w-full bg-slate-950 border border-slate-700 text-slate-100 rounded-lg py-2.5 pl-3 pr-10 focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-slate-500 text-sm" placeholder="Enter email address..." type="email"/>
+</div>
+<div class="relative min-w-[120px]">
+<select class="w-full bg-slate-950 border border-slate-700 text-slate-100 rounded-lg py-2.5 px-3 focus:ring-2 focus:ring-primary focus:border-transparent text-sm appearance-none">
+<option>Can edit</option>
+<option>Can view</option>
+<option>Admin</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2.5 text-slate-500 pointer-events-none">expand_more</span>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-6 rounded-lg text-sm transition-colors whitespace-nowrap">
+                            Send Invite
+                        </button>
+</div>
+</div>
+<!-- Access List Component -->
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<h3 class="text-slate-100 text-sm font-semibold uppercase tracking-wider">People with access</h3>
+<span class="text-xs text-slate-500">3 Members</span>
+</div>
+<div class="space-y-1">
+<!-- User Row 1 -->
+<div class="flex items-center justify-between py-3 group">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm border border-primary/30">
+                                    JD
+                                </div>
+<div>
+<p class="text-sm font-medium text-slate-100">Jane Doe (You)</p>
+<p class="text-xs text-slate-500">jane.doe@company.com</p>
+</div>
+</div>
+<span class="text-xs font-medium text-slate-400 bg-slate-800 px-2 py-1 rounded">Owner</span>
+</div>
+<!-- User Row 2 -->
+<div class="flex items-center justify-between py-3">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-slate-800 overflow-hidden">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="Profile picture of a male user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_Cik5rJMCeBZRMi0hzc-xXjETJo4nd3yf0ABIIDoghUM0ar6nEcfGYeNzrnbNo1R5G3BINdrlztnj1FgBhxuSug-KDw2OCyF--3ZO0YYboTSgMjKVf6bCmCuFuLkqfTQQmMk1vl4e81Un45Hdnn4EzFuHBGo1BoH7PIyzBcf4CiXBzmNfU8XDInIAZ_TrODy_uaXaELGosz2UoVGiaNQs-5rD2-dZsonVtpCNj5nUeSkKRLv5Wx3QgFSRvzbmWgE0O_xJFNnZEIY"/>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-100">Felix Vance</p>
+<p class="text-xs text-slate-500">felix.v@agency.io</p>
+</div>
+</div>
+<div class="relative">
+<button class="flex items-center gap-1 text-sm text-slate-400 hover:text-slate-200 transition-colors">
+                                    Can edit
+                                    <span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+</div>
+</div>
+<!-- User Row 3 -->
+<div class="flex items-center justify-between py-3">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-slate-800 overflow-hidden">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="Profile picture of a female user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDw32fCoIIhLBOk4PDl5ZmLshuB9UsJfLictAQhc3kQezroFcF_syMYe6T7xFQ53nVZN4p0fvNilTX90YgHrG8rlmYasNpqlsr0x5BH4XkXwdCf6Y4_yXhhTrG2Eqff6pis4w5rHCav0N6O_lx5niGADBnGvfhwKk7RtnGuisyuZu8PAtKdnPfP1r9YLrvKdeNPb2nx67V9NkHM309eIblzJY2zQHYz84OL3NcL1G9-CnJpuxTQXPmPgxwNAm5UoSfLorhTaf640X0"/>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-100">Sarah Chen</p>
+<p class="text-xs text-slate-500">s.chen@product.com</p>
+</div>
+</div>
+<div class="relative">
+<button class="flex items-center gap-1 text-sm text-slate-400 hover:text-slate-200 transition-colors">
+                                    Can view
+                                    <span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Public Link Section -->
+<div class="pt-6 border-t border-slate-800">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">link</span>
+<h3 class="text-slate-100 text-sm font-semibold">Public Sharing</h3>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex gap-2">
+<div class="flex-1 flex items-center bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-400 text-sm font-mono overflow-hidden">
+<span class="truncate">https://notes.app/sh/7x2k9_q4_roadmap_2024</span>
+</div>
+<button class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2 px-4 rounded-lg text-sm transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">content_copy</span>
+                            Copy
+                        </button>
+</div>
+<p class="mt-2 text-xs text-slate-500">Anyone with the link can view this document.</p>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="bg-slate-900/50 border-t border-slate-800 px-6 py-4 flex justify-between items-center">
+<button class="text-slate-400 hover:text-slate-200 text-sm font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-lg">settings</span>
+                    Advanced Settings
+                </button>
+<button class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2 px-6 rounded-lg text-sm transition-all">
+                    Done
+                </button>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6467f2",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101122",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header Navigation -->
+<header class="flex items-center justify-between p-4 sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-10 border-b border-slate-200 dark:border-primary/20">
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">arrow_back</span>
+</button>
+<h2 class="text-lg font-bold tracking-tight">NoteStream</h2>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center justify-center p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary">cloud_done</span>
+</button>
+<button class="flex items-center justify-center p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Editor Content Area -->
+<main class="flex-1 px-6 pt-8 pb-32 max-w-3xl mx-auto w-full">
+<!-- Metadata & Title Section -->
+<div class="mb-8">
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-semibold">
+                        # ProjectX
+                    </span>
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold">
+                        Strategy
+                    </span>
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold">
+                        Launch-2024
+                    </span>
+</div>
+<h1 class="text-4xl font-extrabold tracking-tight mb-2 outline-none" contenteditable="true">
+                    Meeting Notes: Project X Launch Strategy
+                </h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                    Last edited Oct 24, 2023 • 10:45 AM
+                </p>
+</div>
+<!-- Block Based Content -->
+<div class="space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300">
+<div class="group relative">
+<p class="outline-none" contenteditable="true">
+                        The objective of this meeting was to align on the core pillars for the Project X market entry. We focused on three main workstreams: brand positioning, technical stability, and user acquisition.
+                    </p>
+</div>
+<div class="group relative border-l-4 border-primary pl-4 py-1 italic">
+<p class="outline-none" contenteditable="true">
+                        "Success isn't just about shipping; it's about the resonance our features have with the early adopters."
+                    </p>
+</div>
+<div class="group relative">
+<h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-slate-100" contenteditable="true">Key Action Items</h3>
+<ul class="space-y-3 list-none">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-1">check_box_outline_blank</span>
+<span class="outline-none" contenteditable="true">Finalize the landing page copy with the creative team.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-1">check_box_outline_blank</span>
+<span class="outline-none" contenteditable="true">Conduct final stress test on the API endpoints.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-1 text-primary/50">check_box</span>
+<span class="line-through text-slate-500" contenteditable="true">Budget approval for Q4 marketing spend.</span>
+</li>
+</ul>
+</div>
+<div class="group relative">
+<div class="w-full aspect-video rounded-xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-300 dark:border-primary/10">
+<img alt="Data visualization chart" class="w-full h-full object-cover" data-alt="Abstract data visualization chart showing upward growth" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZa0lcl_VsTvLknTg5d1o_BmfSDPlLNVaG5aYoXiVJRn-lfez-3UOaUGX3TxysNk3UIJHI1VvqvkG8HHdr7Wn1nKWoPEYpd9fNFqbBxrabw37qQEUg4tiaD_vgRaWXZ0y91QqceCu9x2rlkq3XjQXu9GOkRQ1OmO813dkx-XH80rFPyiufrVh3-kbijs_Sk1ywuS23b278D6ZBTTEpRZTJEf4YAeuRYw2aOatSgw0bHY7zJTWPMLw9wLHjdqeUEA2qM4bPFUwS080"/>
+</div>
+<p class="text-center text-sm text-slate-500 mt-2 italic">Figure 1.1: Projected Growth Curve</p>
+</div>
+<div class="group relative">
+<p class="outline-none" contenteditable="true">
+                        We should explore integrating the new AI summary feature into the beta version to gather immediate feedback. This aligns with our 'innovation-first' approach.
+                    </p>
+</div>
+</div>
+</main>
+<!-- Formatting Toolbar (Bottom Docked) -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background-light dark:from-background-dark to-transparent pointer-events-none">
+<div class="max-w-md mx-auto bg-slate-900 dark:bg-slate-800 rounded-full shadow-2xl p-2 flex items-center justify-between border border-slate-700 pointer-events-auto">
+<div class="flex items-center gap-1 overflow-x-auto no-scrollbar px-2">
+<button class="p-2 text-slate-300 hover:text-white hover:bg-slate-700 rounded-full transition-colors">
+<span class="material-symbols-outlined">format_bold</span>
+</button>
+<button class="p-2 text-slate-300 hover:text-white hover:bg-slate-700 rounded-full transition-colors">
+<span class="material-symbols-outlined">format_italic</span>
+</button>
+<button class="p-2 text-slate-300 hover:text-white hover:bg-slate-700 rounded-full transition-colors">
+<span class="material-symbols-outlined">format_list_bulleted</span>
+</button>
+<button class="p-2 text-slate-300 hover:text-white hover:bg-slate-700 rounded-full transition-colors">
+<span class="material-symbols-outlined">image</span>
+</button>
+<div class="w-px h-6 bg-slate-700 mx-1"></div>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-full font-bold text-sm shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+<span>AI Rewrite</span>
+</button>
+</div>
+<div class="pr-2">
+<button class="p-2 bg-slate-700 text-white rounded-full">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar (Legacy structure but integrated) -->
+<nav class="hidden">
+<!-- This is accessible for structural integrity but hidden to favor the editor toolbar UI -->
+<div class="flex gap-2 border-t border-slate-200 dark:border-primary/20 bg-background-light dark:bg-background-dark px-4 pb-3 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">search</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">add_circle</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

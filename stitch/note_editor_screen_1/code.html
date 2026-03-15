@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6467f2",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101122",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        .selection-highlight {
+            background-color: rgba(100, 103, 242, 0.3);
+            border-bottom: 2px solid #6467f2;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Left Sidebar Navigation -->
+<aside class="w-64 border-r border-slate-200 dark:border-primary/20 flex flex-col bg-white dark:bg-background-dark/50">
+<div class="p-4 flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">account_circle</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-sm font-semibold truncate">Alexander</h1>
+<p class="text-[10px] text-slate-500 dark:text-primary/60 font-medium uppercase tracking-wider">Premium Plan</p>
+</div>
+</div>
+<div class="px-3 py-2 space-y-1">
+<button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm font-medium">All Notes</span>
+</button>
+<button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">star</span>
+<span class="text-sm font-medium">Favorites</span>
+</button>
+<button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">folder</span>
+<span class="text-sm font-medium">Notebooks</span>
+</button>
+<button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">sell</span>
+<span class="text-sm font-medium">Tags</span>
+</button>
+<button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">archive</span>
+<span class="text-sm font-medium">Archive</span>
+</button>
+</div>
+<div class="mt-8 px-3">
+<p class="px-3 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Recent</p>
+<div class="space-y-1">
+<button class="w-full text-left px-3 py-1.5 text-xs text-slate-500 hover:text-primary dark:hover:text-primary transition-colors truncate">Product Roadmap 2024</button>
+<button class="w-full text-left px-3 py-1.5 text-xs text-slate-500 hover:text-primary dark:hover:text-primary transition-colors truncate">Design System Audit</button>
+<button class="w-full text-left px-3 py-1.5 text-xs text-slate-500 hover:text-primary dark:hover:text-primary transition-colors truncate">Weekly Sync Notes</button>
+</div>
+</div>
+<div class="mt-auto p-4">
+<button class="w-full bg-primary hover:bg-primary/90 text-white py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary/20 transition-all">
+<span class="material-symbols-outlined">add</span>
+<span>New Note</span>
+</button>
+</div>
+</aside>
+<!-- Main Editor Area -->
+<main class="flex-1 overflow-y-auto bg-white dark:bg-background-dark relative">
+<!-- Header/Breadcrumbs -->
+<div class="sticky top-0 z-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-8 py-4 flex items-center justify-between border-b border-slate-100 dark:border-primary/10">
+<div class="flex items-center gap-2 text-sm text-slate-400 dark:text-slate-500">
+<span class="hover:text-primary cursor-pointer transition-colors">Notebooks</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-slate-600 dark:text-slate-300 font-medium">Project Strategy</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-4 py-1.5 rounded-lg border border-slate-200 dark:border-primary/20 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined !text-base">share</span>
+                        Share
+                    </button>
+<button class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-primary/10 text-slate-400">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Content Container -->
+<div class="max-w-3xl mx-auto px-8 py-12">
+<!-- Metadata Section -->
+<div class="mb-10 space-y-6">
+<h1 class="text-5xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50 leading-tight">
+                        Q4 Growth Strategy &amp; Roadmaps
+                    </h1>
+<div class="grid grid-cols-2 gap-x-12 gap-y-4 pt-4 border-t border-slate-100 dark:border-primary/10">
+<div class="flex items-center gap-3">
+<span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider w-20">Date</span>
+<span class="text-sm text-slate-600 dark:text-slate-300">October 24, 2023</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider w-20">Editor</span>
+<span class="text-sm text-slate-600 dark:text-slate-300">Alexander V.</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider w-20">Tags</span>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase">Strategy</span>
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase">Q4</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider w-20">Status</span>
+<span class="flex items-center gap-1.5 text-sm text-emerald-500">
+<span class="size-2 rounded-full bg-emerald-500"></span>
+                                Active
+                            </span>
+</div>
+</div>
+</div>
+<!-- Block Editor Content -->
+<div class="prose prose-slate dark:prose-invert max-w-none space-y-8">
+<div class="relative group">
+<h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-8 mb-4">1. Core Objectives</h2>
+<div class="absolute -left-8 top-1.5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-300 dark:text-primary/40 cursor-grab">
+<span class="material-symbols-outlined">drag_indicator</span>
+</div>
+</div>
+<p class="text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                        Our primary focus for the final quarter of the fiscal year is to accelerate user acquisition through organic channels and optimize the onboarding funnel. We need to ensure that the <span class="selection-highlight">transition from free tier to premium features</span> is seamless and value-driven.
+                    </p>
+<!-- Floating Toolbar -->
+<div class="absolute left-1/2 -translate-x-1/2 -mt-24 z-30">
+<div class="bg-slate-900 dark:bg-slate-800 text-white rounded-xl shadow-2xl flex items-center p-1.5 gap-1 border border-white/10">
+<button class="p-1.5 hover:bg-white/10 rounded-lg"><span class="material-symbols-outlined !text-sm">format_bold</span></button>
+<button class="p-1.5 hover:bg-white/10 rounded-lg"><span class="material-symbols-outlined !text-sm">format_italic</span></button>
+<button class="p-1.5 hover:bg-white/10 rounded-lg"><span class="material-symbols-outlined !text-sm">format_underlined</span></button>
+<div class="w-px h-4 bg-white/10 mx-1"></div>
+<button class="p-1.5 hover:bg-white/10 rounded-lg"><span class="material-symbols-outlined !text-sm">link</span></button>
+<button class="p-1.5 hover:bg-white/10 rounded-lg"><span class="material-symbols-outlined !text-sm">comment</span></button>
+<div class="w-px h-4 bg-white/10 mx-1"></div>
+<button class="p-1.5 hover:bg-white/10 rounded-lg flex items-center gap-1">
+<span class="text-[10px] font-bold uppercase px-1">AI</span>
+</button>
+</div>
+<div class="w-3 h-3 bg-slate-900 dark:bg-slate-800 rotate-45 mx-auto -mt-1.5 border-r border-b border-white/10"></div>
+</div>
+<div class="my-8 pl-6 border-l-4 border-primary bg-primary/5 py-4 pr-4 rounded-r-xl">
+<p class="italic text-xl text-slate-700 dark:text-slate-200">
+                            "Growth is never by mere chance; it is the result of forces working together."
+                        </p>
+<cite class="block mt-2 text-sm font-semibold text-primary">— James Cash Penney</cite>
+</div>
+<div class="space-y-3">
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Key Milestones Checklist</h3>
+<div class="space-y-3">
+<div class="flex items-start gap-3 group">
+<div class="mt-1 size-5 rounded border-2 border-primary bg-primary flex items-center justify-center text-white cursor-pointer">
+<span class="material-symbols-outlined !text-sm font-bold">check</span>
+</div>
+<span class="text-slate-600 dark:text-slate-400 line-through decoration-slate-400">Finalize budget allocation for performance marketing</span>
+</div>
+<div class="flex items-start gap-3 group">
+<div class="mt-1 size-5 rounded border-2 border-slate-300 dark:border-primary/40 hover:border-primary transition-colors cursor-pointer"></div>
+<span class="text-slate-800 dark:text-slate-200">A/B Test new landing page copy for mobile users</span>
+</div>
+<div class="flex items-start gap-3 group">
+<div class="mt-1 size-5 rounded border-2 border-slate-300 dark:border-primary/40 hover:border-primary transition-colors cursor-pointer"></div>
+<span class="text-slate-800 dark:text-slate-200">Onboard the new growth engineering squad</span>
+</div>
+<div class="flex items-start gap-3 group">
+<div class="mt-1 size-5 rounded border-2 border-slate-300 dark:border-primary/40 hover:border-primary transition-colors cursor-pointer"></div>
+<span class="text-slate-800 dark:text-slate-200">Execute Q4 Kickoff meeting with stakeholders</span>
+</div>
+</div>
+</div>
+<div class="pt-8">
+<div class="rounded-2xl overflow-hidden border border-slate-100 dark:border-primary/10 shadow-sm">
+<img class="w-full h-64 object-cover" data-alt="Modern data visualization chart showing upward growth trend" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgxiu5Qor8ZlTE94RGqdrMvmYKDU4TMA6tRBHxyVgto-MOVf09zoY4ulRadoGP2JPvnAEmA8-xahhFlgroqYGttKbL6oYbxGxlrMZSGcc9CXlNdz1EQyNUfnLrXtAp3Em7bXDdhBEJxHm3l-1HqIOVDc4sQ7df-Mrh60It0TdXqGecYRF-7Hm2emO7wS7QF2RP-H8yCWb5lUb-el-Lf8TtkjvzH0-9h2EDYLKAYxhEjl2vuuHSJMBdk54Byl0d0KUorq6CMfK0ev4"/>
+<div class="p-3 bg-slate-50 dark:bg-primary/5 text-center">
+<span class="text-xs text-slate-400 dark:text-slate-500 italic">Figure 1: Projected Growth Trend for Q4 (Estimated 22% YoY increase)</span>
+</div>
+</div>
+</div>
+<p class="text-slate-600 dark:text-slate-400 pt-6">
+                        In conclusion, the alignment between marketing and product development teams is more critical than ever. We will review these objectives weekly and adjust our roadmap based on real-time user feedback loops.
+                    </p>
+</div>
+<!-- Bottom Editor Toolbar -->
+<div class="mt-20 pt-8 border-t border-slate-100 dark:border-primary/10 flex justify-between items-center text-slate-400 text-xs">
+<div class="flex gap-4">
+<span>428 words</span>
+<span>2,145 characters</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined !text-sm">schedule</span>
+                        Last edited 2 hours ago
+                    </div>
+</div>
+</div>
+<!-- Block Inserter Button -->
+<button class="fixed bottom-8 right-8 size-12 rounded-full bg-primary text-white shadow-xl shadow-primary/40 flex items-center justify-center hover:scale-110 transition-transform z-40">
+<span class="material-symbols-outlined !text-2xl">add</span>
+</button>
+</main>
+</div>
+</body></html>

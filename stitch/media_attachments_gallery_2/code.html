@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NoteStream - Media Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6467f2",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101122",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-tab {
+            border-bottom: 2px solid #6467f2;
+            color: #6467f2;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex h-screen overflow-hidden">
+<!-- Side Navigation -->
+<aside class="w-64 flex flex-col border-r border-slate-200 dark:border-primary/10 bg-white dark:bg-background-dark">
+<div class="p-6 flex flex-col gap-8 h-full">
+<!-- Profile Section -->
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar smiling person" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARahiDJHPtfL4MAhjLeI2kNmfhueXm4gmHO4s4-X0zOEKWrsOoKpnhzcgLVUF2qbXtwid45VdoANq0ttweOFFuRur57Y22i2j2zpSfmzaJSJ4N2HC5yWa0EKtZ2v6GPhEQv2skEF9RCaVpGktIu6uVz_omwAD8Jep-CA6aF_mT0Hfl-KWjs3LhPbpDq1iLEdcZdKThrgv0_rjgjGA9YRiQ-IlFB4qvj2cihD_XL5p1d97FAbsjcJRdIgTMuR5PA6JLLpAof4y2uGk"/>
+</div>
+<div class="flex flex-col">
+<h1 class="text-sm font-semibold tracking-tight">NoteStream</h1>
+<p class="text-xs text-slate-500 dark:text-primary/60">Premium Plan</p>
+</div>
+</div>
+<!-- Nav Links -->
+<nav class="flex flex-col gap-1 flex-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm font-medium">All Notes</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">folder_open</span>
+<span class="text-sm font-medium">Media Library</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors" href="#">
+<span class="material-symbols-outlined">star</span>
+<span class="text-sm font-medium">Favorites</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors" href="#">
+<span class="material-symbols-outlined">delete</span>
+<span class="text-sm font-medium">Trash</span>
+</a>
+</nav>
+<!-- Bottom Links -->
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden bg-background-light dark:bg-background-dark/50">
+<!-- Header -->
+<header class="h-16 border-b border-slate-200 dark:border-primary/10 flex items-center justify-between px-8 bg-white/50 dark:bg-background-dark/20 backdrop-blur-md">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">filter_vintage</span>
+<h2 class="text-lg font-bold">Media Library</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary text-sm">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-100 dark:bg-primary/5 border-none rounded-lg text-sm w-64 focus:ring-1 focus:ring-primary placeholder:text-slate-500" placeholder="Search attachments..." type="text"/>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white p-2 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Tabs -->
+<div class="px-8 pt-6">
+<div class="flex gap-8 border-b border-slate-200 dark:border-primary/10">
+<button class="pb-3 text-sm font-semibold active-tab flex items-center gap-2">
+                        Images <span class="text-[10px] bg-primary/20 px-1.5 py-0.5 rounded-full">24</span>
+</button>
+<button class="pb-3 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 flex items-center gap-2">
+                        PDFs <span class="text-[10px] bg-slate-200 dark:bg-primary/10 px-1.5 py-0.5 rounded-full">12</span>
+</button>
+<button class="pb-3 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 flex items-center gap-2">
+                        Files <span class="text-[10px] bg-slate-200 dark:bg-primary/10 px-1.5 py-0.5 rounded-full">8</span>
+</button>
+</div>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-8">
+<!-- Section: Images Grid -->
+<section class="mb-10">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-500">Recent Images</h3>
+<button class="text-xs font-semibold text-primary hover:underline">View all</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+<!-- Image Card -->
+<div class="group relative aspect-square rounded-xl overflow-hidden bg-slate-200 dark:bg-primary/5 border border-slate-200 dark:border-primary/10 cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Beautiful mountain landscape at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHVPRPem8zpcdBAw3dvCDpKaQc4lA8cvmuQIiqQYzK-YyZdlbJK_s7_b2MBgn8rWR2KvN2Oy8Atu5oZuntF1OQvy-imh3kypYXHXf4Cw51mkfOVqr_3uW9oCW-C0ubBU71qpMuOyGsXyQ4lqhIcx8se7y2RyOoI7DXfUwz89nzYUanHdCJWSaw2aMN7dziwww-cnPUasDjy9YQA8surjwK0D9Wv3gJleLsWothnTiOF5sstVi2uwiVnBxyx2TJl6xc1gDW0GnLfxw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+<p class="text-[10px] text-white truncate font-medium">mountain_trip.jpg</p>
+</div>
+</div>
+<div class="group relative aspect-square rounded-xl overflow-hidden bg-slate-200 dark:bg-primary/5 border border-slate-200 dark:border-primary/10 cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Sunlight filtering through forest trees" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMxJw56jWwB6HtDIG8Iy4tmIHoQyGPXaFyNt1cSHKLXg5K1UyTJvGuZQWAVGvHVNwyD8vgErmqQgmOXfoyal7k98W5k_QmDAKPbbK3RpkIRhRBclQUug3Pr-wg1eudiqZV4a9lUY_ExtA3ozR0PfdTjrcA1Z9ESj8JTu1VSZhWFtXPZYKKgI2W83CRgkc_oxXik5vE794hxLlJUmKxvC552HtdQC3klLKdGGqHx90WlqD1Ol2M_MH46MmDMPyPVOqIHZqNegCSh-g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+<p class="text-[10px] text-white truncate font-medium">forest_walk.png</p>
+</div>
+</div>
+<div class="group relative aspect-square rounded-xl overflow-hidden bg-slate-200 dark:bg-primary/5 border border-slate-200 dark:border-primary/10 cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Misty landscape with rolling hills" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDK6jKJNDy4ZX9BBjLo97qCuCvZtRjNd8c63TI6tGuAEgJcA1I3I0hWHWBQWj3JeHn3ryNUVpOGTu2NZWzxjf4uZgqpq-AX5socUKosZoRwQKTTJJaViyhJT--1heVFUaeq6fuCfJ-SUsQSjS7RgFN9_vD6esTTuCpRtbbq9UqQnzUISkOdtGKY03AsuvobVFCTlrSiKJ8hGvF6FdW6IM17JINVhOq5Fzt_hcFyIVUa2wK25nTa5xGsHR1oHKUv0h5FFiBcTHumWLY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+<p class="text-[10px] text-white truncate font-medium">misty_morning.jpg</p>
+</div>
+</div>
+<div class="group relative aspect-square rounded-xl overflow-hidden bg-slate-200 dark:bg-primary/5 border border-slate-200 dark:border-primary/10 cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Blue glacial lake with mountains" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHXlUOZ4rTgEQm0DhHuDxIS1MP44KXVLahAzR7EeXXcMGmaTUMWDMboLIKipLqtscxFB_LECrrsAAADK8SGZBpUwl8Cejj2ISyb1NqRvOcdoiTNtCupgrrCFSTo0tYW1WaoYvwlbFpV5IH4Ys1Ue_Rrqt0c8umLStQGq4ksQ6mz5MDXbk9tneLVxpHmBfWVZSZUfGUrFfW3DQdL1wBqeG3vx0KZ6xzkuBenFFSTNbQJKQ_mlb8eUMW-1vyHRpyi59hoeG6CqS1jaU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+<p class="text-[10px] text-white truncate font-medium">lake_view.jpg</p>
+</div>
+</div>
+<div class="group relative aspect-square rounded-xl overflow-hidden bg-slate-200 dark:bg-primary/5 border border-slate-200 dark:border-primary/10 cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Nature pathway through tall grass" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHATP5iSAHFrG-CBhB4SUMlXKaFc8bhlW-3Ms7TMSber9dk5xzrnpk7Wcu58slFBBHToFDDRb0uGM64kSM2gCAK2lp5saE6rfIbXdfNtrL0Ie4Y5BYk1cYaUI9V5YgJfe6809LuJk1Ut5NxJXwZQohEyhWeLS8bECVAnDagi_uHIa5z82Alc_YdCLhEvEiI2d_KZBe4IOZaR7Hx2wvpZTuasalEfYAQhQSrAoIZ_KB5stm4HsBlQf4qWTnIEDguuB4KWGdQy8vji8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+<p class="text-[10px] text-white truncate font-medium">pathway.jpg</p>
+</div>
+</div>
+<div class="group relative aspect-square rounded-xl overflow-hidden bg-slate-200 dark:bg-primary/5 border border-slate-200 dark:border-primary/10 cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Waterfall flowing over mossy rocks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKyU9ZWGxslotUy--EJ9_Dd78RMTK8eV1uwaVos5wp5f4Wb4PBNQvtdEyVqyPvTmE0xXtZbl4mfEWca72zd98-u5tAQ_lFlJXOMGXst_bl1v3g9K3jGtBOsIzrecSDUYdfQsFeLydP6chp0ybmWh9rxtj2zDEg2FyLRwMTE1ambt_-Fjsay6zRrkJnKPwjcNzwfCC8vGjnBtBZx9kHZqjQRSeYxLCua-2G4cxn9H57ubkdps9EUNH0mzK-RR6yxogU39kbhmW4yrs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+<p class="text-[10px] text-white truncate font-medium">waterfall.png</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Files List -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-500">Other Documents</h3>
+<div class="flex gap-2">
+<button class="p-1.5 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">grid_view</span>
+</button>
+<button class="p-1.5 text-primary bg-primary/10 rounded">
+<span class="material-symbols-outlined text-lg">list</span>
+</button>
+</div>
+</div>
+<div class="bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/10 rounded-xl overflow-hidden">
+<!-- File Row 1 -->
+<div class="flex items-center gap-4 px-4 py-3 border-b border-slate-200 dark:border-primary/10 hover:bg-slate-50 dark:hover:bg-primary/10 cursor-pointer transition-colors">
+<div class="size-10 flex items-center justify-center rounded-lg bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined">picture_as_pdf</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-medium truncate">Quarterly_Report_2024.pdf</h4>
+<p class="text-xs text-slate-500">2.4 MB • Uploaded 2 days ago</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-slate-400 px-2 py-1 bg-slate-100 dark:bg-background-dark rounded uppercase font-bold tracking-tight">Financials</span>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-lg">download</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</div>
+</div>
+<!-- File Row 2 -->
+<div class="flex items-center gap-4 px-4 py-3 border-b border-slate-200 dark:border-primary/10 hover:bg-slate-50 dark:hover:bg-primary/10 cursor-pointer transition-colors">
+<div class="size-10 flex items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-medium truncate">Project_Scope_v2.docx</h4>
+<p class="text-xs text-slate-500">842 KB • Uploaded yesterday</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-slate-400 px-2 py-1 bg-slate-100 dark:bg-background-dark rounded uppercase font-bold tracking-tight">Work</span>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-lg">download</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</div>
+</div>
+<!-- File Row 3 -->
+<div class="flex items-center gap-4 px-4 py-3 border-b border-slate-200 dark:border-primary/10 hover:bg-slate-50 dark:hover:bg-primary/10 cursor-pointer transition-colors">
+<div class="size-10 flex items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400">
+<span class="material-symbols-outlined">table_view</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-medium truncate">Budget_Planning.xlsx</h4>
+<p class="text-xs text-slate-500">1.1 MB • Uploaded 4 hours ago</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-slate-400 px-2 py-1 bg-slate-100 dark:bg-background-dark rounded uppercase font-bold tracking-tight">Personal</span>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-lg">download</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</div>
+</div>
+<!-- File Row 4 -->
+<div class="flex items-center gap-4 px-4 py-3 hover:bg-slate-50 dark:hover:bg-primary/10 cursor-pointer transition-colors">
+<div class="size-10 flex items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+<span class="material-symbols-outlined">folder_zip</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-medium truncate">Assets_Backup_Oct.zip</h4>
+<p class="text-xs text-slate-500">15.8 MB • Uploaded Oct 12, 2024</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-slate-400 px-2 py-1 bg-slate-100 dark:bg-background-dark rounded uppercase font-bold tracking-tight">Archive</span>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-lg">download</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>
