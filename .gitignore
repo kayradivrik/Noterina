@@ -13,6 +13,10 @@ out/
 .env.local
 .env.*.local
 
+# Code signing (asla repo'ya eklemeyin)
+*.pfx
+*.p12
+
 # Logs and debug
 npm-debug.log*
 yarn-debug.log*

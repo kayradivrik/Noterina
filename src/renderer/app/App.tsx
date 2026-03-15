@@ -37,10 +37,15 @@ function App() {
   const initialLoadDone = useRef(false)
   const setView = useNotesStore((s) => s.setView)
   const language = useSettingsStore((s) => s.language)
+  const fontSize = useSettingsStore((s) => s.fontSize)
 
   useEffect(() => {
     document.documentElement.lang = language === 'en' ? 'en' : 'tr'
   }, [language])
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-font-size', fontSize)
+  }, [fontSize])
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.electronAPI?.supabase) return

@@ -150,14 +150,14 @@ export function NotesList() {
                         <Star size={16} className="shrink-0 fill-amber-400 text-amber-400" strokeWidth={1.5} />
                       )}
                     </div>
-                    <h3 className={`font-semibold text-slate-900 dark:text-slate-100 leading-tight line-clamp-1 ${compactList ? 'text-sm mb-0.5' : 'text-base mb-1'}`}>
+                    <h3 className={`note-card-title font-semibold text-slate-900 dark:text-slate-100 leading-tight line-clamp-1 ${compactList ? 'mb-0.5' : 'mb-1'} ${compactList ? 'text-sm' : 'text-base'}`}>
                       {note.title || t('notes.untitled')}
                     </h3>
-                    <p className={`text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed ${compactList ? 'text-xs mb-2' : 'text-sm mb-3'}`}>
+                    <p className={`note-card-preview text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed ${compactList ? 'mb-2' : 'mb-3'} ${compactList ? 'text-xs' : 'text-sm'}`}>
                       {getPreviewText(note.content, 80)}
                     </p>
                     <div className={`border-t border-slate-100 dark:border-slate-800 ${compactList ? 'pt-2' : 'pt-3'}`}>
-                      <span className={`text-slate-400 font-medium ${compactList ? 'text-[10px]' : 'text-[11px]'}`}>
+                      <span className={`note-card-meta text-slate-400 font-medium ${compactList ? 'text-[10px]' : 'text-[11px]'}`}>
                         {formatRelativeTime(note.updatedAt, language)}
                       </span>
                     </div>

@@ -54,6 +54,26 @@ html.dark select option {
   background: #232448;
 }
 
+/* Yazı boyutu: not listesi kartları */
+[data-font-size='small'] .note-card .note-card-title {
+  font-size: 0.8125rem;
+}
+[data-font-size='small'] .note-card .note-card-preview {
+  font-size: 0.75rem;
+}
+[data-font-size='small'] .note-card .note-card-meta {
+  font-size: 0.625rem;
+}
+[data-font-size='large'] .note-card .note-card-title {
+  font-size: 1.125rem;
+}
+[data-font-size='large'] .note-card .note-card-preview {
+  font-size: 0.9375rem;
+}
+[data-font-size='large'] .note-card .note-card-meta {
+  font-size: 0.75rem;
+}
+
 /* Note card hover quick-actions (Stitch) */
 .note-card:hover .quick-actions {
   opacity: 1;
@@ -84,6 +104,31 @@ html.dark select option {
   height: 0;
 }
 
+/* Yazı boyutu: Küçük */
+[data-font-size='small'] .ProseMirror {
+  font-size: 0.875rem;
+}
+[data-font-size='small'] .ProseMirror h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 1.25rem 0 0.5rem;
+}
+[data-font-size='small'] .ProseMirror h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+}
+[data-font-size='small'] .ProseMirror h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.5rem;
+}
+
+/* Yazı boyutu: Orta (varsayılan) */
+[data-font-size='medium'] .ProseMirror,
+html:not([data-font-size]) .ProseMirror {
+  font-size: 1rem;
+}
 .ProseMirror h1 {
   font-size: 1.875rem;
   font-weight: 700;
@@ -98,6 +143,26 @@ html.dark select option {
   font-size: 1.25rem;
   font-weight: 600;
   margin: 1rem 0 0.5rem;
+}
+
+/* Yazı boyutu: Büyük */
+[data-font-size='large'] .ProseMirror {
+  font-size: 1.125rem;
+}
+[data-font-size='large'] .ProseMirror h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 1.75rem 0 0.5rem;
+}
+[data-font-size='large'] .ProseMirror h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+}
+[data-font-size='large'] .ProseMirror h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.5rem;
 }
 .ProseMirror ul {
   padding-left: 1.5rem;

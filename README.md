@@ -73,6 +73,37 @@ npm run build
 
 İşletim sistemine göre `release/` içindeki yükleyici veya taşınabilir uygulamayı kullanabilirsiniz.
 
+### Uygulamayı imzalama (Windows)
+
+Windows’ta “Bilinmeyen yayımcı” uyarısını kaldırmak ve SmartScreen’de güvenilir görünmek için kurulumu **kod imzası** (Authenticode) ile imzalayabilirsiniz.
+
+**Ücretsiz seçenek (açık kaynak projeler):** [SignPath Foundation](https://signpath.org/) açık kaynak projelere **ücretsiz** kod imzalama sertifikası veriyor. Projenin GitHub’da public ve açık kaynak lisanslı (örn. MIT) olması yeterli. Başvuru: [signpath.org/apply](https://signpath.org/apply) → formu doldurup `oss-support@signpath.org` adresine gönderin. Onay sonrası imzayı CI/CD (örn. GitHub Actions) veya SignPath araçlarıyla kullanırsınız. Git Extensions, Flameshot, Stellarium gibi projeler bu yöntemi kullanıyor.
+
+**Ücretli sertifika ile (kendi .pfx’iniz varsa):**
+
+1. **Kod imzalama sertifikası edinin**  
+   Windows için “Code Signing” (Authenticode) sertifikası gerekir. Örnek sağlayıcılar: DigiCert, Sectigo, SSL.com. (Ücretlidir; yıllık birkaç yüz dolar civarı.)
+
+2. **Sertifikayı .pfx dosyası olarak hazırlayın**  
+   Sertifikayı .pfx (veya .p12) ve bir parola ile dışa aktarın. Dosyayı güvenli bir yerde saklayın (örn. `build/` klasörüne koymayın, repo’ya eklemeyin).
+
+3. **Ortam değişkenlerini ayarlayın**  
+   Build öncesi şunları tanımlayın:
+   - `CSC_LINK` — Sertifika dosyasının yolu (örn. `file://C:/path/to/certificate.pfx`) veya base64 ile kodlanmış içerik.
+   - `CSC_KEY_PASSWORD` — .pfx dosyasının parolası.
+
+   Örnek (PowerShell, tek seferlik build):
+   ```powershell
+   $env:CSC_LINK = "file://C:\path\to\your\certificate.pfx"
+   $env:CSC_KEY_PASSWORD = "sertifika_parolaniz"
+   npm run build
+   ```
+
+4. **Build alın**  
+   `npm run build` çalıştırdığınızda electron-builder, bu değişkenler tanımlıysa `.exe` ve kurulumu otomatik imzalar.
+
+Sertifika **tanımlı değilse** build yine tamamlanır; yalnızca imza atılmaz ve Windows “Bilinmeyen yayımcı” diyebilir.
+
 ---
 
 ## Proje Yapısı
