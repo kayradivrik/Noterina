@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Bold, Italic, Strikethrough, Code } from 'lucide-react'
 import type { Editor } from '@tiptap/core'
+import { useTranslation } from '../../i18n/useTranslation'
 
 interface SelectionContextMenuProps {
   editor: Editor
@@ -10,6 +11,7 @@ interface SelectionContextMenuProps {
 }
 
 export function SelectionContextMenu({ editor, x, y, onClose }: SelectionContextMenuProps) {
+  const { t } = useTranslation()
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export function SelectionContextMenu({ editor, x, y, onClose }: SelectionContext
           type="button"
           onClick={() => run(() => editor.chain().focus().toggleBold().run())}
           className={`rounded p-2 transition ${editor.isActive('bold') ? 'bg-primary/20 text-primary' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-          title="Kalın (Ctrl+B)"
+          title={t('toolbar.bold')}
         >
           <Bold size={18} />
         </button>
@@ -54,7 +56,7 @@ export function SelectionContextMenu({ editor, x, y, onClose }: SelectionContext
           type="button"
           onClick={() => run(() => editor.chain().focus().toggleItalic().run())}
           className={`rounded p-2 transition ${editor.isActive('italic') ? 'bg-primary/20 text-primary' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-          title="İtalik (Ctrl+I)"
+          title={t('toolbar.italic')}
         >
           <Italic size={18} />
         </button>
@@ -62,7 +64,7 @@ export function SelectionContextMenu({ editor, x, y, onClose }: SelectionContext
           type="button"
           onClick={() => run(() => editor.chain().focus().toggleStrike().run())}
           className={`rounded p-2 transition ${editor.isActive('strike') ? 'bg-primary/20 text-primary' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-          title="Üstü çizili"
+          title={t('toolbar.strike')}
         >
           <Strikethrough size={18} />
         </button>
@@ -70,7 +72,7 @@ export function SelectionContextMenu({ editor, x, y, onClose }: SelectionContext
           type="button"
           onClick={() => run(() => editor.chain().focus().toggleCode().run())}
           className={`rounded p-2 transition ${editor.isActive('code') ? 'bg-primary/20 text-primary' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-          title="Kod"
+          title={t('toolbar.code')}
         >
           <Code size={18} />
         </button>

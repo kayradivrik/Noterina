@@ -64,7 +64,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     const { notes, view, tagFilter, searchQuery } = get()
     let list = notes.filter((n) => !n.isDeleted)
     if (view === 'favorites') list = list.filter((n) => n.isFavorite)
-    if (view === 'trash') list = notes.filter((n) => n.isDeleted)
+    if (view === 'trash') list = notes.filter((n) => Boolean(n.isDeleted))
     if (view === 'recent') {
       list = [...list].sort(
         (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()

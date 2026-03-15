@@ -2,6 +2,10 @@ import { useEffect, useRef } from 'react'
 import { useNotesStore } from '../store/useNotesStore'
 import { useSettingsStore } from '../store/useSettingsStore'
 import { useCommandPaletteStore } from '../store/useCommandPaletteStore'
+import { useAuthStore } from '../store/useAuthStore'
+import { useSupabaseStore } from '../store/useSupabaseStore'
+import { getSupabase } from '../store/useSupabaseStore'
+import { fetchNotesFromCloud } from '../lib/cloudSync'
 import { Layout } from '../components/Layout'
 import { CommandPalette } from '../features/search/CommandPalette'
 import { Settings } from '../features/settings/Settings'
@@ -29,9 +33,22 @@ function App() {
   const notes = useNotesStore((s) => s.notes)
   const addNote = useNotesStore((s) => s.addNote)
   const setActiveNoteId = useNotesStore((s) => s.setActiveNoteId)
-
+  const session = useAuthStore((s) => s.session)
   const initialLoadDone = useRef(false)
   const setView = useNotesStore((s) => s.setView)
+  const language = useSettingsStore((s) => s.language)
+
+  useEffect(() => {
+    document.documentElement.lang = language === 'en' ? 'en' : 'tr'
+  }, [language])
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.electronAPI?.supabase) return
+    useSupabaseStore.getState().loadConfig().then(() => {
+      if (getSupabase()) useAuthStore.getState().init()
+    })
+  }, [])
+
   useEffect(() => {
     if (initialLoadDone.current) return
     if (typeof window === 'undefined' || !window.electronAPI) return
@@ -46,6 +63,20 @@ function App() {
       .catch(() => {})
     fetchNotes(true).catch(() => {})
   }, [loadSettings, fetchNotes, setView])
+
+  const sessionRef = useRef(session)
+  useEffect(() => {
+    if (!getSupabase() || !session || sessionRef.current === session) return
+    sessionRef.current = session
+    fetchNotesFromCloud()
+      .then((cloudNotes) => {
+        if (cloudNotes.length > 0) {
+          return window.electronAPI.notes.replaceAll(cloudNotes).then(() => fetchNotes(true))
+        }
+        return fetchNotes(true)
+      })
+      .catch(() => fetchNotes(true))
+  }, [session, fetchNotes])
 
   const hasSeeded = useRef(false)
   useEffect(() => {

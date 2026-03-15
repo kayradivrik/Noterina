@@ -1,10 +1,12 @@
 import { useRef, useEffect } from 'react'
+import { useTranslation } from '../../i18n/useTranslation'
+import type { TranslationKey } from '../../i18n/translations'
 
-const EMOJI_GROUPS: { label: string; emojis: string[] }[] = [
-  { label: 'Yüzler', emojis: ['😀', '😊', '🥲', '😎', '🤔', '😢', '😡', '🥳', '😴', '🤗', '👍', '👎', '👏', '🙌', '🤝', '💪'] },
-  { label: 'Kalp & Doğa', emojis: ['❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '💕', '🌟', '✨', '🔥', '💯', '🌸', '🌺', '🍀'] },
-  { label: 'Nesneler', emojis: ['📌', '📎', '✏️', '📝', '📁', '📂', '📅', '📆', '✅', '❌', '⚠️', '💡', '🔔', '📌', '🏷️', '📌'] },
-  { label: 'Semboller', emojis: ['➡️', '⬅️', '⬆️', '⬇️', '🔴', '🟢', '🟡', '🔵', '⚪', '🟣', '🟤', '⚫', '1️⃣', '2️⃣', '3️⃣', '✔️'] },
+const EMOJI_GROUP_KEYS: { labelKey: TranslationKey; emojis: string[] }[] = [
+  { labelKey: 'emoji.faces', emojis: ['😀', '😊', '🥲', '😎', '🤔', '😢', '😡', '🥳', '😴', '🤗', '👍', '👎', '👏', '🙌', '🤝', '💪'] },
+  { labelKey: 'emoji.hearts', emojis: ['❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '💕', '🌟', '✨', '🔥', '💯', '🌸', '🌺', '🍀'] },
+  { labelKey: 'emoji.objects', emojis: ['📌', '📎', '✏️', '📝', '📁', '📂', '📅', '📆', '✅', '❌', '⚠️', '💡', '🔔', '📌', '🏷️', '📌'] },
+  { labelKey: 'emoji.symbols', emojis: ['➡️', '⬅️', '⬆️', '⬇️', '🔴', '🟢', '🟡', '🔵', '⚪', '🟣', '🟤', '⚫', '1️⃣', '2️⃣', '3️⃣', '✔️'] },
 ]
 
 interface EmojiPickerProps {
@@ -14,6 +16,7 @@ interface EmojiPickerProps {
 }
 
 export function EmojiPicker({ onSelect, onClose, anchorRef }: EmojiPickerProps) {
+  const { t } = useTranslation()
   const popoverRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -44,10 +47,10 @@ export function EmojiPicker({ onSelect, onClose, anchorRef }: EmojiPickerProps) 
       className="absolute left-0 top-full z-50 mt-1 w-72 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark shadow-xl overflow-hidden"
     >
       <div className="max-h-64 overflow-y-auto p-2 custom-scrollbar">
-        {EMOJI_GROUPS.map((group) => (
-          <div key={group.label} className="mb-2">
+        {EMOJI_GROUP_KEYS.map((group) => (
+          <div key={group.labelKey} className="mb-2">
             <div className="px-1 py-0.5 text-xs font-medium text-slate-500 dark:text-slate-400">
-              {group.label}
+              {t(group.labelKey)}
             </div>
             <div className="grid grid-cols-8 gap-0.5">
               {group.emojis.map((emoji) => (

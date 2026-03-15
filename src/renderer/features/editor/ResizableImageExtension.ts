@@ -67,11 +67,11 @@ export const ResizableImageExtension = Node.create({
     return {
       setImage:
         (options: { src: string; alt?: string; title?: string; size?: ImageSize }) =>
-        ({ commands }: { commands: any }) =>
+        ({ commands }: { commands: { insertContent: (content: object) => boolean } }) =>
           commands.insertContent({
             type: this.name,
             attrs: { ...options, size: options.size ?? 'medium' },
           }),
-    }
+    } as unknown as Partial<import('@tiptap/core').RawCommands>
   },
 })

@@ -21,16 +21,21 @@ import { ResizableImageExtension } from './ResizableImageExtension'
 import Italic from '@tiptap/extension-italic'
 import Strike from '@tiptap/extension-strike'
 import Code from '@tiptap/extension-code'
+import { useMemo } from 'react'
 import type { Note } from '@shared/types'
 import { SelectionContextMenu } from './SelectionContextMenu'
 import { useNotesStore } from '../../store/useNotesStore'
 import { useSettingsStore } from '../../store/useSettingsStore'
+import { getTranslation } from '../../i18n/translations'
+import { useTranslation } from '../../i18n/useTranslation'
+import { syncAfterSave } from '../../lib/syncAfterMutation'
+import { useSavedFlashStore } from '../../store/useSavedFlashStore'
 
 interface NoteEditorProps {
   note: Note
 }
 
-const extensions = [
+const baseExtensions = [
   Document,
   Paragraph,
   Text,
@@ -49,13 +54,19 @@ const extensions = [
   Italic,
   Strike,
   Code,
-  Placeholder.configure({ placeholder: 'Yazmaya başlayın veya "/" ile komut girin...' }),
 ]
 
 export function NoteEditor({ note }: NoteEditorProps) {
+  const { t } = useTranslation()
   const updateNoteInStore = useNotesStore((s) => s.updateNoteInStore)
   const autosave = useSettingsStore((s) => s.autosave)
   const autosaveDelayMs = useSettingsStore((s) => s.autosaveDelayMs)
+  const language = useSettingsStore((s) => s.language)
+  const untitledTitle = getTranslation(language, 'editor.untitledNoteTitle')
+  const extensions = useMemo(
+    () => [...baseExtensions, Placeholder.configure({ placeholder: getTranslation(language, 'editor.placeholder') })],
+    [language]
+  )
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const imageInputRef = useRef<HTMLInputElement>(null)
   const galleryInputRef = useRef<HTMLInputElement>(null)
@@ -71,13 +82,18 @@ export function NoteEditor({ note }: NoteEditorProps) {
     triggerGalleryRef.current = () => galleryInputRef.current?.click()
   }, [])
 
+  const markSaved = useSavedFlashStore((s) => s.markSaved)
   const flushSave = useCallback(
     (content: string, title: string) => {
       window.electronAPI.notes.update(note.id, { content, title }).then((updated) => {
-        if (updated) updateNoteInStore(note.id, { content, title, updatedAt: updated.updatedAt })
+        if (updated) {
+          updateNoteInStore(note.id, { content, title, updatedAt: updated.updatedAt })
+          syncAfterSave({ ...note, ...updated, content, title })
+          markSaved(note.id)
+        }
       })
     },
-    [note.id, updateNoteInStore]
+    [note, updateNoteInStore, markSaved]
   )
 
   const editor = useEditor({
@@ -155,7 +171,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
       saveTimeoutRef.current = setTimeout(() => {
         const html = editor.getHTML()
         const firstLine = editor.state.doc.firstChild?.textContent?.trim().slice(0, 100) ?? ''
-        const title = firstLine || 'Başlıksız Not'
+        const title = firstLine || untitledTitle
         flushSave(html, title)
         saveTimeoutRef.current = null
       }, autosaveDelayMs)
@@ -165,7 +181,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
       editor.off('update', onUpdate)
       if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current)
     }
-  }, [editor, autosave, autosaveDelayMs, flushSave])
+  }, [editor, autosave, autosaveDelayMs, flushSave, untitledTitle])
 
   useEffect(() => {
     return () => {
@@ -173,10 +189,10 @@ export function NoteEditor({ note }: NoteEditorProps) {
       if (editor && autosave) {
         const html = editor.getHTML()
         const firstLine = editor.state.doc.firstChild?.textContent?.trim().slice(0, 100) ?? ''
-        flushSave(html, firstLine || 'Başlıksız Not')
+        flushSave(html, firstLine || untitledTitle)
       }
     }
-  }, [editor, autosave, flushSave])
+  }, [editor, autosave, flushSave, untitledTitle])
 
   const handleContextMenu = useCallback(
     (e: React.MouseEvent) => {
@@ -202,9 +218,12 @@ export function NoteEditor({ note }: NoteEditorProps) {
           r.readAsDataURL(file)
         })
       Promise.all(toProcess.map(readAsDataURL)).then((urls) => {
+        if (!editor) return
         urls.forEach((url, i) => {
-          editor.chain().focus().setImage({ src: url }).run()
-          if (i < urls.length - 1) editor.chain().focus().addParagraphAfter().run()
+          ;(editor.chain().focus() as unknown as { setImage: (o: { src: string }) => { run: () => boolean } })
+            .setImage({ src: url })
+            .run()
+          if (i < urls.length - 1) editor.chain().focus().insertContent({ type: 'paragraph' }).run()
         })
       })
     },
@@ -220,7 +239,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
             onClick={() => editor.chain().focus().undo().run()}
             disabled={!editor.can().undo()}
             className="rounded-lg p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 disabled:pointer-events-none transition-colors"
-            title="Geri al (Ctrl+Z)"
+            title={t('toolbar.undo')}
           >
             <Undo2 size={18} />
           </button>
@@ -229,7 +248,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
             onClick={() => editor.chain().focus().redo().run()}
             disabled={!editor.can().redo()}
             className="rounded-lg p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 disabled:pointer-events-none transition-colors"
-            title="Yinele (Ctrl+Y)"
+            title={t('toolbar.redo')}
           >
             <Redo2 size={18} />
           </button>
@@ -240,7 +259,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
               type="button"
               onClick={() => setEmojiOpen((v) => !v)}
               className="rounded-lg p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-              title="Emoji ekle"
+              title={t('toolbar.addEmoji')}
             >
               <Smile size={18} />
             </button>
@@ -269,7 +288,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
             type="button"
             onClick={() => imageInputRef.current?.click()}
             className="rounded-lg p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-            title="Resim ekle"
+            title={t('toolbar.addImage')}
           >
             <ImagePlus size={18} />
           </button>
@@ -288,7 +307,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
             type="button"
             onClick={() => galleryInputRef.current?.click()}
             className="rounded-lg p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-            title="Galeri (çoklu resim)"
+            title={t('toolbar.addGallery')}
           >
             <Images size={18} />
           </button>

@@ -13,6 +13,7 @@ const channel = {
     search: 'notes:search',
     exportNotes: 'notes:export',
     importNotes: 'notes:import',
+    replaceAll: 'notes:replaceAll',
   },
   settings: {
     get: 'settings:get',
@@ -22,11 +23,19 @@ const channel = {
     info: 'storage:info',
     openDataFolder: 'storage:openDataFolder',
   },
+  supabase: {
+    getConfig: 'supabase:getConfig',
+    setConfig: 'supabase:setConfig',
+  },
 } as const
 
 export function registerIpcHandlers(): void {
-  ipcMain.handle(channel.notes.getAll, async (_event: IpcMainInvokeEvent, options?: { includeDeleted?: boolean }) => {
-    return storage.getNotes(options?.includeDeleted ?? false)
+  ipcMain.handle(channel.notes.getAll, async (_event: IpcMainInvokeEvent, includeDeletedOrOptions?: boolean | { includeDeleted?: boolean }) => {
+    const includeDeleted =
+      typeof includeDeletedOrOptions === 'boolean'
+        ? includeDeletedOrOptions
+        : (includeDeletedOrOptions?.includeDeleted ?? false)
+    return storage.getNotes(includeDeleted)
   })
 
   ipcMain.handle(channel.notes.getById, async (_event: IpcMainInvokeEvent, id: string) => {
@@ -61,6 +70,10 @@ export function registerIpcHandlers(): void {
     return storage.importNotes(data, format)
   })
 
+  ipcMain.handle(channel.notes.replaceAll, async (_event: IpcMainInvokeEvent, notes: Note[]) => {
+    storage.replaceAllNotes(notes)
+  })
+
   ipcMain.handle(channel.settings.get, async () => {
     return storage.getSettings()
   })
@@ -76,6 +89,14 @@ export function registerIpcHandlers(): void {
   ipcMain.handle(channel.storage.openDataFolder, async () => {
     const { path: dataPath } = storage.getStorageInfo()
     await shell.openPath(dataPath)
+  })
+
+  ipcMain.handle(channel.supabase.getConfig, async () => {
+    return storage.getSupabaseConfig()
+  })
+
+  ipcMain.handle(channel.supabase.setConfig, async (_event: IpcMainInvokeEvent, config: { url: string; anonKey: string }) => {
+    storage.setSupabaseConfig(config)
   })
 }
 

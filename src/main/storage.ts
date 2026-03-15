@@ -5,6 +5,7 @@ import type { Note, NotesData, AppSettings } from '../shared/types'
 
 const defaultSettings: AppSettings = {
   theme: 'dark',
+  language: 'tr',
   fontSize: 'medium',
   autosave: true,
   autosaveDelayMs: 2000,
@@ -24,6 +25,37 @@ function getNotesFilePath(): string {
 
 function getSettingsFilePath(): string {
   return path.join(getDataPath(), 'settings.json')
+}
+
+function getSupabaseConfigPath(): string {
+  return path.join(getDataPath(), 'supabase-config.json')
+}
+
+export interface SupabaseConfig {
+  url: string
+  anonKey: string
+}
+
+function loadSupabaseConfig(): SupabaseConfig {
+  ensureDataDir()
+  const filePath = getSupabaseConfigPath()
+  if (!fs.existsSync(filePath)) return { url: '', anonKey: '' }
+  try {
+    const raw = fs.readFileSync(filePath, 'utf-8')
+    const o = JSON.parse(raw) as { url?: string; anonKey?: string }
+    return { url: String(o.url ?? '').trim(), anonKey: String(o.anonKey ?? '').trim() }
+  } catch {
+    return { url: '', anonKey: '' }
+  }
+}
+
+function saveSupabaseConfig(config: SupabaseConfig): void {
+  ensureDataDir()
+  fs.writeFileSync(
+    getSupabaseConfigPath(),
+    JSON.stringify({ url: config.url.trim(), anonKey: config.anonKey.trim() }, null, 2),
+    'utf-8'
+  )
 }
 
 function ensureDataDir(): void {
@@ -79,8 +111,9 @@ function generateId(): string {
 export const storage = {
   getNotes(includeDeleted: boolean): Note[] {
     const { notes } = loadNotesRaw()
-    if (includeDeleted) return notes
-    return notes.filter((n) => !n.isDeleted)
+    const normalized = notes.map((n) => ({ ...n, isDeleted: Boolean(n.isDeleted) }))
+    if (includeDeleted) return normalized
+    return normalized.filter((n) => !n.isDeleted)
   },
 
   getNoteById(id: string): Note | null {
@@ -221,5 +254,35 @@ export const storage = {
     const { notes } = loadNotesRaw()
     const active = notes.filter((n) => !n.isDeleted).length
     return { notesCount: active, path: getDataPath() }
+  },
+
+  getSupabaseConfig(): SupabaseConfig {
+    return loadSupabaseConfig()
+  },
+
+  setSupabaseConfig(config: SupabaseConfig): void {
+    saveSupabaseConfig(config)
+  },
+
+  /** Buluttan çekilen notlarla yerel dosyayı tamamen değiştirir (sync için). */
+  replaceAllNotes(notes: Note[]): void {
+    ensureDataDir()
+    const data: NotesData = {
+      notes: notes.map((n) => ({
+        ...n,
+        id: n.id,
+        title: n.title ?? 'Untitled',
+        content: n.content ?? '',
+        createdAt: n.createdAt ?? new Date().toISOString(),
+        updatedAt: n.updatedAt ?? new Date().toISOString(),
+        tags: Array.isArray(n.tags) ? n.tags : [],
+        isFavorite: Boolean(n.isFavorite),
+        isArchived: Boolean(n.isArchived),
+        isDeleted: Boolean(n.isDeleted),
+        icon: n.icon,
+      })),
+      version: 1,
+    }
+    saveNotesRaw(data)
   },
 }

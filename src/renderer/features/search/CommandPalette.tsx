@@ -3,9 +3,11 @@ import { createPortal } from 'react-dom'
 import { Search, FileText } from 'lucide-react'
 import { useCommandPaletteStore } from '../../store/useCommandPaletteStore'
 import { useNotesStore } from '../../store/useNotesStore'
+import { useTranslation } from '../../i18n/useTranslation'
 import { getPreviewText } from '../../utils/noteActions'
 
 export function CommandPalette() {
+  const { t } = useTranslation()
   const isOpen = useCommandPaletteStore((s) => s.isOpen)
   const close = useCommandPaletteStore((s) => s.close)
   const [query, setQuery] = useState('')
@@ -83,7 +85,7 @@ export function CommandPalette() {
   const modal = (
     <div
       role="dialog"
-      aria-label="Notlarda ara"
+      aria-label={t('palette.ariaSearch')}
       className="fixed left-1/2 top-[15%] z-50 w-full max-w-2xl -translate-x-1/2 overflow-hidden rounded-xl shadow-2xl border border-primary/20 bg-[rgba(16,17,34,0.95)] dark:bg-[rgba(16,17,34,0.95)] backdrop-blur-xl"
       onClick={(e) => e.stopPropagation()}
     >
@@ -93,7 +95,7 @@ export function CommandPalette() {
           <input
             type="text"
             autoFocus
-            placeholder="Notlarda ara veya komut yazın..."
+            placeholder={t('palette.searchPlaceholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full bg-primary/5 border-none rounded-lg py-4 pl-12 pr-4 text-lg text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-primary/50 outline-none"
@@ -105,9 +107,9 @@ export function CommandPalette() {
       </div>
       <div className="max-h-[60vh] overflow-y-auto custom-scrollbar">
         <div className="py-3">
-          <h3 className="px-6 py-2 text-xs font-bold uppercase tracking-widest text-primary/60">Notlar</h3>
+          <h3 className="px-6 py-2 text-xs font-bold uppercase tracking-widest text-primary/60">{t('palette.notes')}</h3>
           {results.length === 0 ? (
-            <div className="px-6 py-6 text-center text-sm text-slate-500">Sonuç yok</div>
+            <div className="px-6 py-6 text-center text-sm text-slate-500">{t('notes.noResults')}</div>
           ) : (
             <div className="px-4 pb-2 space-y-0.5">
               {results.map((note, i) => (
@@ -124,7 +126,7 @@ export function CommandPalette() {
                     <FileText size={20} className="text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-100 truncate">{note.title || 'Başlıksız'}</p>
+                    <p className="text-sm font-semibold text-slate-100 truncate">{note.title || t('notes.untitled')}</p>
                     <p className="text-xs text-slate-500 truncate">{getPreviewText(note.content, 60)}</p>
                   </div>
                   {i === selectedIndex && (
@@ -140,11 +142,11 @@ export function CommandPalette() {
         <div className="flex gap-4">
           <span className="flex items-center gap-1">
             <kbd className="rounded px-1.5 py-0.5 bg-primary/15 border border-primary/30 leading-none">↑↓</kbd>
-            gezin
+            {t('palette.navigate')}
           </span>
           <span className="flex items-center gap-1">
             <kbd className="rounded px-1.5 py-0.5 bg-primary/15 border border-primary/30 leading-none">↵</kbd>
-            aç
+            {t('palette.open')}
           </span>
         </div>
         <span className="font-semibold text-primary">Notes</span>

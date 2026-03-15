@@ -13,24 +13,33 @@ import {
 import { useNotesStore } from '../../store/useNotesStore'
 import logoUrl from '../../assets/sas.png'
 import { useSettingsStore } from '../../store/useSettingsStore'
+import { useTranslation } from '../../i18n/useTranslation'
 import { createNewNote, createNoteFromTemplate } from '../../utils/noteActions'
 import { NOTE_TEMPLATES } from '../../utils/templates'
+import type { TranslationKey } from '../../i18n/translations'
 
 const NAV_ITEMS = [
-  { id: 'all', label: 'Tüm Notlar', icon: FileText },
-  { id: 'favorites', label: 'Favoriler', icon: Star },
-  { id: 'recent', label: 'Son Düzenlenenler', icon: Clock },
-  { id: 'trash', label: 'Çöp Kutusu', icon: Trash2 },
+  { id: 'all', labelKey: 'sidebar.allNotes', icon: FileText },
+  { id: 'favorites', labelKey: 'sidebar.favorites', icon: Star },
+  { id: 'recent', labelKey: 'sidebar.recent', icon: Clock },
+  { id: 'trash', labelKey: 'sidebar.trash', icon: Trash2 },
 ] as const
 
-export function Sidebar() {
+interface SidebarProps {
+  onClose?: () => void
+}
+
+export function Sidebar({ onClose }: SidebarProps) {
+  const { t } = useTranslation()
   const [collapsed, setCollapsed] = useState(false)
   const [templateOpen, setTemplateOpen] = useState(false)
   const templateRef = useRef<HTMLDivElement>(null)
   const view = useNotesStore((s) => s.view)
   const setView = useNotesStore((s) => s.setView)
   const setActiveNoteId = useNotesStore((s) => s.setActiveNoteId)
+  const fetchNotes = useNotesStore((s) => s.fetchNotes)
   const setSettingsOpen = useSettingsStore((s) => s.setOpen)
+  const language = useSettingsStore((s) => s.language)
 
   useEffect(() => {
     if (!templateOpen) return
@@ -42,13 +51,14 @@ export function Sidebar() {
   }, [templateOpen])
 
   const handleNewNote = async () => {
-    const note = await createNewNote()
+    const note = await createNewNote(language)
     if (note) {
       useNotesStore.getState().addNote(note)
       useNotesStore.getState().setActiveNoteId(note.id)
       useNotesStore.getState().setView('all')
     }
     setTemplateOpen(false)
+    onClose?.()
   }
 
   const handleTemplateSelect = async (templateId: string) => {
@@ -65,6 +75,7 @@ export function Sidebar() {
       useNotesStore.getState().setView('all')
     }
     setTemplateOpen(false)
+    onClose?.()
   }
 
   const navButtonClass = (id: string) =>
@@ -79,22 +90,24 @@ export function Sidebar() {
           type="button"
           onClick={() => setCollapsed(false)}
           className="rounded-lg p-2 text-slate-400 hover:text-primary transition-colors flex items-center justify-center"
-          title="Genişlet"
+          title={t('sidebar.expand')}
         >
           <ChevronRight size={20} />
         </button>
         <img src={logoUrl} alt="Notes" className="mt-4 size-9 object-contain rounded-lg shrink-0" />
         <div className="mt-4 flex flex-col gap-1">
-          {NAV_ITEMS.map(({ id, icon: Icon }) => (
+          {NAV_ITEMS.map(({ id, labelKey, icon: Icon }) => (
             <button
               key={id}
               type="button"
               onClick={() => {
                 setView(id)
                 setActiveNoteId(null)
+                if (id === 'trash') fetchNotes(true)
+                onClose?.()
               }}
               className={`rounded-lg p-2 transition ${view === id ? 'bg-primary/10 text-primary' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200'}`}
-              title={NAV_ITEMS.find((i) => i.id === id)?.label}
+              title={t(labelKey)}
             >
               <Icon size={22} />
             </button>
@@ -105,7 +118,7 @@ export function Sidebar() {
             type="button"
             onClick={() => setTemplateOpen((v) => !v)}
             className="rounded-lg p-2 text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors"
-            title="Yeni not veya şablon"
+            title={t('sidebar.newNoteOrTemplate')}
           >
             <Plus size={22} />
           </button>
@@ -117,19 +130,19 @@ export function Sidebar() {
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
               >
                 <span className="text-lg">📄</span>
-                Boş not
+                {t('sidebar.blankNote')}
               </button>
               <div className="border-t border-slate-100 dark:border-slate-800 my-1" />
-              <p className="px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Şablonlar</p>
-              {NOTE_TEMPLATES.filter((t) => t.id !== 'blank').map((t) => (
+              <p className="px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{t('sidebar.templates')}</p>
+              {NOTE_TEMPLATES.filter((tmpl) => tmpl.id !== 'blank').map((tmpl) => (
                 <button
-                  key={t.id}
+                  key={tmpl.id}
                   type="button"
-                  onClick={() => handleTemplateSelect(t.id)}
+                  onClick={() => handleTemplateSelect(tmpl.id)}
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
-                  <span className="text-lg">{t.icon}</span>
-                  {t.name}
+                  <span className="text-lg">{tmpl.icon}</span>
+                  {t(`template.${tmpl.id}` as TranslationKey)}
                 </button>
               ))}
             </div>
@@ -137,9 +150,9 @@ export function Sidebar() {
         </div>
         <button
           type="button"
-          onClick={() => setSettingsOpen(true)}
+          onClick={() => { setSettingsOpen(true); onClose?.() }}
           className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-200 transition-colors"
-          title="Ayarlar"
+          title={t('sidebar.settings')}
         >
           <Settings size={22} />
         </button>
@@ -148,37 +161,50 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="w-64 flex-shrink-0 flex flex-col border-r border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark">
-      <div className="p-6 flex items-center justify-between">
+    <aside className="h-full w-64 flex-shrink-0 flex flex-col border-r border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark">
+      <div className="p-6 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
           <img src={logoUrl} alt="Notes" className="size-9 object-contain rounded-lg shrink-0" />
           <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Notes</h2>
         </div>
-        <button
-          type="button"
-          onClick={() => setCollapsed(true)}
-          className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-200 transition-colors"
-          title="Daralt"
-        >
-          <ChevronLeft size={18} />
-        </button>
+        {onClose ? (
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-200 transition-colors touch-manipulation"
+            aria-label="Close menu"
+          >
+            <ChevronLeft size={18} />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setCollapsed(true)}
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-200 transition-colors"
+            title={t('sidebar.collapse')}
+          >
+            <ChevronLeft size={18} />
+          </button>
+        )}
       </div>
       <div className="flex-1 overflow-y-auto custom-scrollbar px-4 space-y-8">
         <div>
-          <p className="px-2 mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Kütüphane</p>
+          <p className="px-2 mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{t('sidebar.library')}</p>
           <nav className="space-y-1">
-            {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
+            {NAV_ITEMS.map(({ id, labelKey, icon: Icon }) => (
               <button
                 key={id}
                 type="button"
                 onClick={() => {
                   setView(id)
                   setActiveNoteId(null)
+                  if (id === 'trash') fetchNotes(true)
+                  onClose?.()
                 }}
                 className={`w-full text-left ${navButtonClass(id)}`}
               >
                 <Icon size={22} strokeWidth={1.8} />
-                <span className="text-sm">{label}</span>
+                <span className="text-sm">{t(labelKey)}</span>
               </button>
             ))}
           </nav>
@@ -192,7 +218,7 @@ export function Sidebar() {
             className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 text-white py-2.5 px-4 text-sm font-semibold transition-all shadow-lg shadow-primary/20"
           >
             <Plus size={18} />
-            Yeni Not
+            {t('sidebar.newNote')}
             <ChevronDown size={16} className="opacity-80" />
           </button>
           {templateOpen && (
@@ -203,19 +229,19 @@ export function Sidebar() {
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
               >
                 <span className="text-lg">📄</span>
-                Boş not
+                {t('sidebar.blankNote')}
               </button>
               <div className="border-t border-slate-100 dark:border-slate-800 my-1" />
-              <p className="px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Şablonlar</p>
-              {NOTE_TEMPLATES.filter((t) => t.id !== 'blank').map((t) => (
+              <p className="px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{t('sidebar.templates')}</p>
+              {NOTE_TEMPLATES.filter((tmpl) => tmpl.id !== 'blank').map((tmpl) => (
                 <button
-                  key={t.id}
+                  key={tmpl.id}
                   type="button"
-                  onClick={() => handleTemplateSelect(t.id)}
+                  onClick={() => handleTemplateSelect(tmpl.id)}
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
-                  <span className="text-lg">{t.icon}</span>
-                  {t.name}
+                  <span className="text-lg">{tmpl.icon}</span>
+                  {t(`template.${tmpl.id}` as TranslationKey)}
                 </button>
               ))}
             </div>
@@ -223,11 +249,11 @@ export function Sidebar() {
         </div>
         <button
           type="button"
-          onClick={() => setSettingsOpen(true)}
+          onClick={() => { setSettingsOpen(true); onClose?.() }}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors mt-2"
         >
           <Settings size={20} />
-          <span className="text-sm font-medium">Ayarlar</span>
+          <span className="text-sm font-medium">{t('sidebar.settings')}</span>
         </button>
       </div>
     </aside>

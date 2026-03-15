@@ -6,6 +6,13 @@
   box-sizing: border-box;
 }
 
+/* Mobil: dokunma gecikmesini azaltır */
+@media (max-width: 1023px) {
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+}
+
 html,
 body,
 #root {
@@ -108,15 +115,30 @@ html.dark select option {
   margin: 0.75rem 0;
   color: #94a3b8;
 }
-.ProseMirror pre {
+/* Kod bloğu (pre): açık temada açık gri, koyu temada koyu */
+html:not(.dark) .ProseMirror pre {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+html.dark .ProseMirror pre {
   background: #1e293b;
+}
+.ProseMirror pre {
   border-radius: 0.5rem;
   padding: 1rem;
   overflow-x: auto;
   margin: 0.75rem 0;
   font-size: 0.875rem;
 }
-.ProseMirror code {
+/* Açık temada inline code: nötr gri (mavi vurguyu kaldır) */
+html:not(.dark) .ProseMirror code {
+  background: #e2e8f0;
+  color: #334155;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+html.dark .ProseMirror code {
   background: #334155;
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;

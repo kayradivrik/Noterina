@@ -11,6 +11,7 @@ export interface ElectronAPI {
     search: (query: string) => Promise<Note[]>
     exportNotes: (format: 'json' | 'markdown') => Promise<string>
     importNotes: (data: string, format: 'json') => Promise<{ imported: number; errors: string[] }>
+    replaceAll: (notes: Note[]) => Promise<void>
   }
   settings: {
     get: () => Promise<AppSettings>
@@ -19,6 +20,10 @@ export interface ElectronAPI {
   storage: {
     info: () => Promise<{ notesCount: number; path: string }>
     openDataFolder: () => Promise<string>
+  }
+  supabase: {
+    getConfig: () => Promise<{ url: string; anonKey: string }>
+    setConfig: (config: { url: string; anonKey: string }) => Promise<void>
   }
 }
 

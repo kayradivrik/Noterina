@@ -19,15 +19,17 @@ export interface NotesData {
 
 export type ThemeMode = 'dark' | 'light'
 
+export type AppLanguage = 'tr' | 'en'
+
 export type DefaultView = 'all' | 'favorites' | 'recent'
 export type SortOrder = 'newest' | 'oldest' | 'title'
 
 export interface AppSettings {
   theme: ThemeMode
+  language: AppLanguage
   fontSize: 'small' | 'medium' | 'large'
   autosave: boolean
   autosaveDelayMs: number
-  /** Otomatik kaydet gecikmesi (ms) */
   defaultView: DefaultView
   sortOrder: SortOrder
   compactList: boolean

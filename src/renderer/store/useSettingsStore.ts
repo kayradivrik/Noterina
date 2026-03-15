@@ -11,6 +11,7 @@ interface SettingsState extends AppSettings {
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
   theme: 'dark',
+  language: 'tr',
   fontSize: 'medium',
   autosave: true,
   autosaveDelayMs: 2000,

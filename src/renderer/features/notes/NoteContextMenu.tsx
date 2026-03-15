@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { Edit3, Star, Trash2, RotateCcw, ImageIcon } from 'lucide-react'
+import { Edit3, Star, Trash2, RotateCcw, ImageIcon, Copy } from 'lucide-react'
 import type { Note } from '@shared/types'
 import { useNotesStore } from '../../store/useNotesStore'
+import { useSettingsStore } from '../../store/useSettingsStore'
 import { useTrashUndoStore } from '../../store/useTrashUndoStore'
+import { useTranslation } from '../../i18n/useTranslation'
 import { NOTE_ICONS } from './noteIcons'
 
 interface NoteContextMenuProps {
@@ -13,13 +15,16 @@ interface NoteContextMenuProps {
 }
 
 export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
+  const { t } = useTranslation()
   const menuRef = useRef<HTMLDivElement>(null)
   const [showIcons, setShowIcons] = useState(false)
   const setActiveNoteId = useNotesStore((s) => s.setActiveNoteId)
   const updateNoteInStore = useNotesStore((s) => s.updateNoteInStore)
   const removeNoteFromStore = useNotesStore((s) => s.removeNoteFromStore)
+  const addNote = useNotesStore((s) => s.addNote)
   const fetchNotes = useNotesStore((s) => s.fetchNotes)
   const view = useNotesStore((s) => s.view)
+  const language = useSettingsStore((s) => s.language)
   const setLastTrashed = useTrashUndoStore((s) => s.setLastTrashed)
   const isTrash = view === 'trash'
 
@@ -51,7 +56,11 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
 
   const handleToggleFavorite = async () => {
     const updated = await window.electronAPI.notes.toggleFavorite(note.id)
-    if (updated) updateNoteInStore(note.id, { isFavorite: updated.isFavorite })
+    if (updated) {
+      updateNoteInStore(note.id, { isFavorite: updated.isFavorite })
+      const { syncAfterSave } = await import('../../lib/syncAfterMutation')
+      syncAfterSave(updated)
+    }
     onClose()
   }
 
@@ -61,6 +70,8 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
     setActiveNoteId(null)
     fetchNotes(true)
     setLastTrashed(note.id)
+    const { syncAfterSave } = await import('../../lib/syncAfterMutation')
+    syncAfterSave({ ...note, isDeleted: true, updatedAt: new Date().toISOString() })
     onClose()
   }
 
@@ -70,21 +81,51 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
       updateNoteInStore(note.id, { isDeleted: false })
       setActiveNoteId(null)
       fetchNotes(true)
+      const { syncAfterSave } = await import('../../lib/syncAfterMutation')
+      syncAfterSave(updated)
     }
     onClose()
   }
 
   const handleDeletePermanently = async () => {
+    if (!window.confirm(t('confirm.deletePermanently'))) return
     await window.electronAPI.notes.delete(note.id, true)
     removeNoteFromStore(note.id)
     setActiveNoteId(null)
     fetchNotes(true)
+    const { syncAfterDelete } = await import('../../lib/syncAfterMutation')
+    syncAfterDelete(note.id)
+    onClose()
+  }
+
+  const handleDuplicate = async () => {
+    const suffix = language === 'en' ? ' (copy)' : ' (kopya)'
+    const newNote = await window.electronAPI.notes.create({
+      title: note.title + suffix,
+      content: note.content,
+      tags: [...(note.tags ?? [])],
+      isFavorite: note.isFavorite,
+      isArchived: false,
+      isDeleted: false,
+      icon: note.icon,
+    })
+    if (newNote) {
+      addNote(newNote)
+      setActiveNoteId(newNote.id)
+      fetchNotes(true)
+      const { syncAfterSave } = await import('../../lib/syncAfterMutation')
+      syncAfterSave(newNote)
+    }
     onClose()
   }
 
   const handleIconSelect = async (icon: string) => {
     const updated = await window.electronAPI.notes.update(note.id, { icon })
-    if (updated) updateNoteInStore(note.id, { icon })
+    if (updated) {
+      updateNoteInStore(note.id, { icon })
+      const { syncAfterSave } = await import('../../lib/syncAfterMutation')
+      syncAfterSave({ ...note, ...updated })
+    }
     setShowIcons(false)
     onClose()
   }
@@ -103,7 +144,7 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
             className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <Edit3 size={16} />
-            Düzenle
+            {t('menu.edit')}
           </button>
           {!isTrash && (
             <>
@@ -113,7 +154,7 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
                 <Star size={16} className={note.isFavorite ? 'fill-amber-400 text-amber-400' : ''} />
-                {note.isFavorite ? 'Favorilerden çıkar' : 'Favorilere ekle'}
+                {note.isFavorite ? t('menu.removeFromFavorites') : t('menu.addToFavorites')}
               </button>
               <button
                 type="button"
@@ -121,7 +162,15 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
                 <ImageIcon size={16} />
-                Simge değiştir
+                {t('menu.changeIcon')}
+              </button>
+              <button
+                type="button"
+                onClick={handleDuplicate}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <Copy size={16} />
+                {t('menu.duplicateNote')}
               </button>
               <button
                 type="button"
@@ -129,7 +178,7 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
               >
                 <Trash2 size={16} />
-                Çöp kutusuna taşı
+                {t('menu.moveToTrash')}
               </button>
             </>
           )}
@@ -141,7 +190,7 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
                 <RotateCcw size={16} />
-                Geri al
+                {t('menu.restore')}
               </button>
               <button
                 type="button"
@@ -149,14 +198,14 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
               >
                 <Trash2 size={16} />
-                Kalıcı sil
+                {t('menu.deletePermanently')}
               </button>
             </>
           )}
         </>
       ) : (
         <div className="p-2">
-          <p className="px-2 py-1 text-xs font-medium text-slate-500 dark:text-slate-400">Simge seç</p>
+          <p className="px-2 py-1 text-xs font-medium text-slate-500 dark:text-slate-400">{t('notes.selectIcon')}</p>
           <div className="grid grid-cols-8 gap-1">
             {NOTE_ICONS.map((emoji) => (
               <button
