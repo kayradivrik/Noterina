@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { Edit3, Star, Trash2, RotateCcw, ImageIcon, Copy } from 'lucide-react'
+import { Edit3, Star, Trash2, RotateCcw, ImageIcon, Copy, Lock } from 'lucide-react'
 import type { Note } from '@shared/types'
 import { useNotesStore } from '../../store/useNotesStore'
 import { useSettingsStore } from '../../store/useSettingsStore'
 import { useTrashUndoStore } from '../../store/useTrashUndoStore'
 import { useTranslation } from '../../i18n/useTranslation'
 import { NOTE_ICONS } from './noteIcons'
+import { usePasswordModalStore } from '../../store/usePasswordModalStore'
 
 interface NoteContextMenuProps {
   note: Note
@@ -27,6 +28,8 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
   const language = useSettingsStore((s) => s.language)
   const setLastTrashed = useTrashUndoStore((s) => s.setLastTrashed)
   const isTrash = view === 'trash'
+  const openSetPassword = usePasswordModalStore((s) => s.openSet)
+  const openRemovePassword = usePasswordModalStore((s) => s.openRemove)
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -102,7 +105,7 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
     const suffix = language === 'en' ? ' (copy)' : ' (kopya)'
     const newNote = await window.electronAPI.notes.create({
       title: note.title + suffix,
-      content: note.content,
+      content: note.isLocked ? '' : note.content,
       tags: [...(note.tags ?? [])],
       isFavorite: note.isFavorite,
       isArchived: false,
@@ -172,6 +175,25 @@ export function NoteContextMenu({ note, x, y, onClose }: NoteContextMenuProps) {
                 <Copy size={16} />
                 {t('menu.duplicateNote')}
               </button>
+              {note.isLocked ? (
+                <button
+                  type="button"
+                  onClick={() => { openRemovePassword(note); onClose() }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                >
+                  <Lock size={16} />
+                  {t('menu.removePassword')}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => { openSetPassword(note); onClose() }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                >
+                  <Lock size={16} />
+                  {t('menu.setPassword')}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={handleMoveToTrash}

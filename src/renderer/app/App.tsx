@@ -10,6 +10,7 @@ import { Layout } from '../components/Layout'
 import { CommandPalette } from '../features/search/CommandPalette'
 import { Settings } from '../features/settings/Settings'
 import { TrashUndoToast } from '../components/TrashUndoToast'
+import { PasswordModal } from '../components/PasswordModal'
 
 const DEMO_NOTES: Array<{ title: string; content: string; isFavorite?: boolean }> = [
   {
@@ -129,6 +130,7 @@ function App() {
       <CommandPalette />
       <Settings />
       <TrashUndoToast />
+      <PasswordModal />
     </>
   )
 }

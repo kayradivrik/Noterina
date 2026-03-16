@@ -1,5 +1,5 @@
 import { useMemo, useState, useRef, useEffect } from 'react'
-import { Search, FileText, Star, ImageIcon } from 'lucide-react'
+import { Search, FileText, Star, ImageIcon, Lock } from 'lucide-react'
 import type { Note } from '@shared/types'
 import { useNotesStore } from '../../store/useNotesStore'
 import { useSettingsStore } from '../../store/useSettingsStore'
@@ -150,11 +150,12 @@ export function NotesList() {
                         <Star size={16} className="shrink-0 fill-amber-400 text-amber-400" strokeWidth={1.5} />
                       )}
                     </div>
-                    <h3 className={`note-card-title font-semibold text-slate-900 dark:text-slate-100 leading-tight line-clamp-1 ${compactList ? 'mb-0.5' : 'mb-1'} ${compactList ? 'text-sm' : 'text-base'}`}>
-                      {note.title || t('notes.untitled')}
+                    <h3 className={`note-card-title font-semibold text-slate-900 dark:text-slate-100 leading-tight line-clamp-1 ${compactList ? 'mb-0.5' : 'mb-1'} ${compactList ? 'text-sm' : 'text-base'} flex items-center gap-1.5`}>
+                      {note.isLocked && <Lock size={14} className="shrink-0 text-primary" />}
+                      {note.isLocked ? (note.title || t('notes.untitled')) + ' · ' + t('notes.locked') : (note.title || t('notes.untitled'))}
                     </h3>
                     <p className={`note-card-preview text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed ${compactList ? 'mb-2' : 'mb-3'} ${compactList ? 'text-xs' : 'text-sm'}`}>
-                      {getPreviewText(note.content, 80)}
+                      {note.isLocked ? '••••••••••' : getPreviewText(note.content, 80)}
                     </p>
                     <div className={`border-t border-slate-100 dark:border-slate-800 ${compactList ? 'pt-2' : 'pt-3'}`}>
                       <span className={`note-card-meta text-slate-400 font-medium ${compactList ? 'text-[10px]' : 'text-[11px]'}`}>

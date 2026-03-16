@@ -10,6 +10,10 @@ export interface Note {
   isDeleted: boolean
   /** Emoji veya simge (örn. 📝, 📄) */
   icon?: string
+  /** Şifre ile kilitli */
+  isLocked?: boolean
+  /** Basit kilit sistemi: düz şifre (normalize(NFC, trim)) */
+  lockPassword?: string
 }
 
 export interface NotesData {

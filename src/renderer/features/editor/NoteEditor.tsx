@@ -26,6 +26,8 @@ import type { Note } from '@shared/types'
 import { SelectionContextMenu } from './SelectionContextMenu'
 import { useNotesStore } from '../../store/useNotesStore'
 import { useSettingsStore } from '../../store/useSettingsStore'
+import { usePasswordModalStore } from '../../store/usePasswordModalStore'
+import { useUnlockedNotesStore } from '../../store/useUnlockedNotesStore'
 import { getTranslation } from '../../i18n/translations'
 import { useTranslation } from '../../i18n/useTranslation'
 import { syncAfterSave } from '../../lib/syncAfterMutation'
@@ -76,6 +78,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
   const emojiButtonRef = useRef<HTMLButtonElement>(null)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null)
   const editorWrapperRef = useRef<HTMLDivElement>(null)
+  const lock = useUnlockedNotesStore((s) => s.lock)
 
   useEffect(() => {
     triggerImageRef.current = () => imageInputRef.current?.click()
@@ -83,11 +86,14 @@ export function NoteEditor({ note }: NoteEditorProps) {
   }, [])
 
   const markSaved = useSavedFlashStore((s) => s.markSaved)
+  const displayContent = note.content
+
   const flushSave = useCallback(
-    (content: string, title: string) => {
-      window.electronAPI.notes.update(note.id, { content, title }).then((updated) => {
+    async (content: string, title: string) => {
+      const updates: Partial<Note> = { content, title }
+      window.electronAPI.notes.update(note.id, updates).then((updated) => {
         if (updated) {
-          updateNoteInStore(note.id, { content, title, updatedAt: updated.updatedAt })
+          updateNoteInStore(note.id, { ...updates, updatedAt: updated.updatedAt })
           syncAfterSave({ ...note, ...updated, content, title })
           markSaved(note.id)
         }
@@ -98,7 +104,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
 
   const editor = useEditor({
     extensions,
-    content: note.content,
+    content: displayContent,
     editorProps: {
       attributes: {
         class:
@@ -159,10 +165,16 @@ export function NoteEditor({ note }: NoteEditorProps) {
 
   useEffect(() => {
     if (!editor) return
-    if (editor.getHTML() !== note.content) {
-      editor.commands.setContent(note.content, false)
+    if (editor.getHTML() !== displayContent) {
+      editor.commands.setContent(displayContent, false)
     }
-  }, [note.id, note.content, editor])
+  }, [note.id, displayContent, editor])
+
+  useEffect(() => {
+    if (!editor) return
+    usePasswordModalStore.getState().setGetContent(() => editor.getHTML())
+    return () => usePasswordModalStore.getState().setGetContent(null)
+  }, [editor])
 
   useEffect(() => {
     if (!editor || !autosave) return
@@ -193,6 +205,13 @@ export function NoteEditor({ note }: NoteEditorProps) {
       }
     }
   }, [editor, autosave, flushSave, untitledTitle])
+
+  // Not ekranından ayrılınca bu notu tekrar kilitle
+  useEffect(() => {
+    return () => {
+      lock(note.id)
+    }
+  }, [lock, note.id])
 
   const handleContextMenu = useCallback(
     (e: React.MouseEvent) => {

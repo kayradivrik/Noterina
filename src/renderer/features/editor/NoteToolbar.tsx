@@ -1,4 +1,4 @@
-import { Star, Trash2, RotateCcw, ArrowLeft } from 'lucide-react'
+import { Star, Trash2, RotateCcw, ArrowLeft, Lock } from 'lucide-react'
 import type { Note } from '@shared/types'
 import { useNotesStore } from '../../store/useNotesStore'
 import { useSettingsStore } from '../../store/useSettingsStore'
@@ -6,6 +6,7 @@ import { useTrashUndoStore } from '../../store/useTrashUndoStore'
 import { useTranslation } from '../../i18n/useTranslation'
 import { useSavedFlashStore } from '../../store/useSavedFlashStore'
 import { syncAfterSave, syncAfterDelete } from '../../lib/syncAfterMutation'
+import { usePasswordModalStore } from '../../store/usePasswordModalStore'
 
 interface NoteToolbarProps {
   note: Note
@@ -58,6 +59,8 @@ export function NoteToolbar({ note }: NoteToolbarProps) {
   }
 
   const isTrash = view === 'trash'
+  const openSetPassword = usePasswordModalStore((s) => s.openSet)
+  const openRemovePassword = usePasswordModalStore((s) => s.openRemove)
   const savedNoteId = useSavedFlashStore((s) => s.savedNoteId)
   const showSaved = savedNoteId === note.id
 
@@ -87,6 +90,25 @@ export function NoteToolbar({ note }: NoteToolbarProps) {
       <div className="flex items-center gap-1 shrink-0">
         {!isTrash && (
           <>
+            {note.isLocked ? (
+              <button
+                type="button"
+                onClick={() => openRemovePassword(note)}
+                className="rounded-lg p-2 text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                title={t('menu.removePassword')}
+              >
+                <Lock size={18} />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => openSetPassword(note)}
+                className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary transition-colors"
+                title={t('menu.setPassword')}
+              >
+                <Lock size={18} />
+              </button>
+            )}
             <button
               type="button"
               onClick={handleToggleFavorite}

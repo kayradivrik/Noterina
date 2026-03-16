@@ -65,6 +65,25 @@ function ensureDataDir(): void {
   }
 }
 
+function normalizeLegacyLock(note: any): any {
+  if (!note) return note
+  if (note.isLocked && (note as any).passwordSalt && (note as any).contentIv) {
+    const content = String(note.content ?? '')
+    const looksPlain =
+      content.startsWith('<p') ||
+      content.startsWith('{') ||
+      content.startsWith('[') ||
+      content.length < 512
+    if (looksPlain) {
+      note.isLocked = false
+      delete (note as any).passwordHash
+      delete (note as any).passwordSalt
+      delete (note as any).contentIv
+    }
+  }
+  return note
+}
+
 function loadNotesRaw(): NotesData {
   ensureDataDir()
   const filePath = getNotesFilePath()
@@ -74,7 +93,9 @@ function loadNotesRaw(): NotesData {
   try {
     const raw = fs.readFileSync(filePath, 'utf-8')
     const data = JSON.parse(raw) as NotesData
-    return Array.isArray(data.notes) ? data : { notes: [], version: 1 }
+    if (!Array.isArray(data.notes)) return { notes: [], version: 1 }
+    const migratedNotes = data.notes.map((n) => normalizeLegacyLock({ ...n })) as Note[]
+    return { notes: migratedNotes, version: data.version ?? 1 }
   } catch {
     return { notes: [], version: 1 }
   }
@@ -118,7 +139,9 @@ export const storage = {
 
   getNoteById(id: string): Note | null {
     const { notes } = loadNotesRaw()
-    return notes.find((n) => n.id === id) ?? null
+    const note = notes.find((n) => n.id === id) ?? null
+    if (!note) return null
+    return { ...note } as Note
   },
 
   createNote(note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>): Note {
@@ -147,9 +170,19 @@ export const storage = {
     if (index === -1) return null
     const note = data.notes[index]
     const updatedAt = new Date().toISOString()
-    const allowed = ['title', 'content', 'tags', 'isFavorite', 'isArchived', 'isDeleted', 'icon'] as const
+    const allowed = [
+      'title',
+      'content',
+      'tags',
+      'isFavorite',
+      'isArchived',
+      'isDeleted',
+      'icon',
+      'isLocked',
+      'lockPassword',
+    ] as const
     for (const key of allowed) {
-      if (updates[key] !== undefined) {
+      if (key in updates) {
         ;(note as unknown as Record<string, unknown>)[key] = updates[key]
       }
     }
